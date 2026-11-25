@@ -21,3 +21,8 @@ push/
 .env*
 *.key
 *.pem
+# личные данные и состояние сервисов
+ghal_faces/
+dr_status/
+backup_status.json
+relay_health.json

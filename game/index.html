@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>VAYNAH VPN</title>
+<script src="telegram-web-app.js"></script>
+<style>
+:root{--bg:#081426;--card:#102B50;--line:#2b2762;--txt:#eef0ff;--mut:#8f93c9;--acc:#1685FF;--acc2:#53D8FF;--gold:#53D8FF;--red:#ff4d6d;--grn:#3dffa8}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:15px/1.35 -apple-system,system-ui,"Segoe UI",Roboto,Arial,sans-serif;overflow:hidden;touch-action:none}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block}
+.scr{position:fixed;inset:0;overflow-y:auto;padding:14px 14px 90px;background:radial-gradient(120% 70% at 50% 0%,#2a1460 0%,#0b0a22 55%,#081426 100%);touch-action:pan-y}
+.hide{display:none!important}
+.top{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:7px 11px;font-weight:700;display:flex;gap:6px;align-items:center}
+.pill small{font-weight:500;color:var(--mut);font-size:11px}
+.logo{font-weight:900;font-size:22px;letter-spacing:.5px;margin:4px 0 2px}
+.brand-art{display:block;width:104px;height:104px;object-fit:contain;margin:0 auto 4px;filter:drop-shadow(0 8px 18px #0008)}
+.promo-art{display:block;width:min(100%,250px);height:150px;object-fit:contain;margin:-8px auto 0;filter:drop-shadow(0 8px 18px #0008)}
+.logo b{color:var(--acc)}
+.sub{color:var(--mut);font-size:13px;margin-bottom:14px}
+.card{background:linear-gradient(180deg,#17154000,#17154000),var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.wh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:800;font-size:16px}
+.wh span{font-size:12px;color:var(--mut);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lv{aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background:#1d1a4a;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:var(--txt)}
+.lv i{font-style:normal;font-size:9px;letter-spacing:-1px;color:var(--gold);height:11px}
+.lv.next{background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;box-shadow:0 0 18px #1685FF66}
+.lv.lock{opacity:.35}
+.lockbox{display:flex;gap:10px;align-items:center;color:var(--mut);font-size:13px}
+.lockbox b{color:var(--txt)}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:13px;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2));margin-top:10px}
+.btn.ghost{background:#221f55;border:1px solid var(--line)}
+.btn:disabled{opacity:.45}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:#0c0b25ee;border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));backdrop-filter:blur(8px)}
+.tab{flex:1;text-align:center;font-size:11px;color:var(--mut);padding:5px 0}
+.tab div{font-size:21px}
+.tab.on{color:var(--txt)}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #ffffff10;gap:10px}
+.row:last-child{border:0}
+.row .r{color:var(--mut);text-align:right}
+.big{font-size:30px;font-weight:900}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.stat div{background:#1d1a4a;border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px}
+.stat small{color:var(--mut);font-size:11px}
+#hud{position:fixed;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top)) 12px 0;display:flex;justify-content:space-between;align-items:center;pointer-events:none;font-weight:800;text-shadow:0 1px 6px #000}
+#hud .h{background:#0009;border-radius:12px;padding:6px 10px}
+#prog{position:fixed;left:12px;right:12px;top:calc(50px + env(safe-area-inset-top));height:5px;background:#ffffff22;border-radius:4px;pointer-events:none}
+#prog div{height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--grn));border-radius:4px}
+#buffs{position:fixed;left:12px;top:calc(62px + env(safe-area-inset-top));font-size:13px;font-weight:700;pointer-events:none}
+#ad{position:fixed;inset:12% 8%;border-radius:18px;background:repeating-linear-gradient(45deg,#53D8FF,#53D8FF 18px,#ffb800 18px,#ffb800 36px);color:#2a1800;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;text-align:center;pointer-events:none;box-shadow:0 0 60px #000}
+#ad small{font-size:14px;font-weight:700;margin-top:8px}
+#flash{position:fixed;inset:0;background:#ff2d55;opacity:0;pointer-events:none;transition:opacity .25s}
+#msg{position:fixed;left:0;right:0;top:38%;text-align:center;font-size:30px;font-weight:900;pointer-events:none;text-shadow:0 2px 14px #000}
+#hint{position:fixed;left:0;right:0;bottom:calc(30px + env(safe-area-inset-bottom));text-align:center;color:#fffc;font-weight:700;pointer-events:none;text-shadow:0 1px 6px #000}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal .card{width:100%;max-width:380px;text-align:center}
+.stars{font-size:38px;letter-spacing:4px;margin:6px 0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:#222052;border:1px solid var(--line);padding:10px 14px;border-radius:12px;font-weight:700;z-index:30;max-width:90%;text-align:center}
+.inf{background:linear-gradient(135deg,#2b0f5e,#0f3a5e);}
+.me{color:var(--acc)}
+</style></head>
+<body>
+<canvas id="gl" class="hide"></canvas>
+
+<!-- HOME -->
+<div id="home" class="scr">
+  <div class="top">
+    <div class="pill" id="pE">⚡ <span id="eTxt">–</span> <small id="eNext"></small></div>
+    <div class="pill">🔑 <span id="kTxt">–</span></div>
+  </div>
+  <img class="brand-art" src="assets/vaynah-avatar-final.png" alt="VAYNAH Raven">
+  <div class="logo">VAYNAH <b>Runner</b></div>
+  <div class="sub">Беги по горным тропам Кавказа. Свайпы: ← → прыжок ↑ пригнуться ↓</div>
+  <div class="sub" id="devTxt"></div>
+  <div id="worlds"></div>
+</div>
+
+<!-- FRIENDS -->
+<div id="friends" class="scr hide">
+  <img class="promo-art" src="assets/vaynah-promo-funnel.png" alt="Продвижение VAYNAH">
+  <div class="logo">📈 Пригласи друга</div>
+  <div class="sub">Приглашай друзей в VAYNAH VPN — получай бонусы в игре</div>
+  <div class="card">
+    <div class="stat"><div><b id="fS">0</b><small>пришли</small></div><div><b id="fV">0</b><small>подключили VPN</small></div><div><b id="fP">0</b><small>оплатили</small></div></div>
+    <button class="btn" id="inviteBtn">📨 Пригласить друга</button>
+    <button class="btn ghost" id="copyBtn">🔗 Скопировать ссылку</button>
+  </div>
+  <div class="card">
+    <div class="wh">Что дают друзья</div>
+    <div class="row"><div>Друг запустил бота</div><div class="r">+3 ⚡</div></div>
+    <div class="row"><div>Друг подключил VPN</div><div class="r">+10 ⚡, максимум 7</div></div>
+    <div class="row"><div>Друг оплатил тариф</div><div class="r">♾ энергия на 7 дней</div></div>
+    <div class="row"><div>5 друзей оплатили</div><div class="r">♾ энергия навсегда</div></div>
+    <div class="row"><div>1 друг</div><div class="r">🇳🇱 мир</div></div>
+    <div class="row"><div>3 друга</div><div class="r">🇩🇪 мир</div></div>
+    <div class="row"><div>1 оплативший друг</div><div class="r">🇫🇮 мир</div></div>
+  </div>
+</div>
+
+<!-- REWARDS -->
+<div id="rewards" class="scr hide">
+  <div class="logo">🎁 Награды</div>
+  <div class="sub">Меняй ключи на дни VPN VAYNAH VPN</div>
+  <div class="card" style="text-align:center">
+    <div class="big">🔑 <span id="rK">0</span></div>
+    <div class="sub" id="rInfo" style="margin:6px 0 0"></div>
+    <button class="btn" id="red1">Обменять 500 🔑 → 1 день VPN</button>
+  </div>
+  <div class="card">
+    <div class="wh">Как получить ключи</div>
+    <div class="row"><div>Собирай 🔑 в забегах</div><div class="r">все уровни</div></div>
+    <div class="row"><div>3 ⭐ на уровне</div><div class="r">≥85% ключей</div></div>
+    <div class="row"><div>Топ-3 недели</div><div class="r">+7 / +3 / +1 день</div></div>
+  </div>
+</div>
+
+<!-- TOP -->
+<div id="top" class="scr hide">
+  <div class="logo">🏆 Рейтинг недели</div>
+  <div class="sub" id="tInfo">По ключам за неделю. Топ-3 получают 7, 3 и 1 день VPN</div>
+  <div class="card" id="tList"></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab on" data-t="home"><div>🎮</div>Играть</div>
+  <div class="tab" data-t="friends"><div>👥</div>Друзья</div>
+  <div class="tab" data-t="rewards"><div>🎁</div>Награды</div>
+  <div class="tab" data-t="top"><div>🏆</div>Рейтинг</div>
+</div>
+
+<!-- GAME HUD -->
+<div id="hudWrap" class="hide">
+  <div id="hud"><div class="h" id="hLives">❤️❤️❤️</div><div class="h" id="hLvl">Ур. 1</div><div class="h">🔑 <span id="hKeys">0</span></div></div>
+  <div id="prog"><div></div></div>
+  <div id="buffs"></div>
+  <div id="ad" class="hide">РЕКЛАМА 📢<small>Без VPN-рекламы жить проще 😉</small></div>
+  <div id="flash"></div>
+  <div id="msg"></div>
+  <div id="hint">Свайп ← → ↑ ↓</div>
+</div>
+
+<div id="modal" class="modal hide"><div class="card" id="mBody"></div></div>
+
+<script type="module">
+import * as THREE from './three.module.min.js';
+const tg = window.Telegram && Telegram.WebApp;
+const INIT = tg ? tg.initData : '';
+if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#081426');tg.setBackgroundColor('#081426');tg.disableVerticalSwipes&&tg.disableVerticalSwipes();}catch(e){} }
+const $ = id => document.getElementById(id);
+const haptic = t => { try{ tg && tg.HapticFeedback && (t==='err'?tg.HapticFeedback.notificationOccurred('error'):tg.HapticFeedback.impactOccurred(t||'light')); }catch(e){} };
+let S = null;
+
+async function api(path, body){
+  const r = await fetch('api/'+path, {method: body?'POST':'GET', headers:{'X-Init-Data':INIT,'Content-Type':'application/json'}, body: body?JSON.stringify(body):undefined});
+  let j = {}; try{ j = await r.json(); }catch(e){}
+  if (!r.ok) throw Object.assign(new Error(j.error||r.status), {data:j, status:r.status});
+  return j;
+}
+function toast(t){ const d=document.createElement('div'); d.className='toast'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+const fmtT = s => { s=Math.max(0,s|0); const m=(s/60)|0, x=s%60; return m+':'+String(x).padStart(2,'0'); };
+
+// ------------------------------------------------ меню
+let eTimer=null;
+function render(){
+  if(!S) return;
+  $('eTxt').textContent = S.infinite ? '♾' : `${S.energy}/${S.emax}`;
+  $('kTxt').textContent = S.keys;
+  if($('devTxt')) $('devTxt').textContent = S.devices && S.devices.limit ? `📱 VPN: ${S.devices.count}/${S.devices.limit} устройств · ключ менять не нужно` : '';
+  clearInterval(eTimer);
+  let nx = S.next;
+  const tick=()=>{ $('eNext').textContent = (!S.infinite && S.energy<S.emax && nx>0) ? '+1 через '+fmtT(nx) : ''; if(nx>0) nx--; else if(!S.infinite && S.energy<S.emax){ refresh(); } };
+  tick(); eTimer=setInterval(tick,1000);
+  const W = $('worlds'); W.innerHTML='';
+  S.worlds.forEach((w,i)=>{
+    const c=document.createElement('div'); c.className='card';
+    const got = Object.entries(S.stars).filter(([k])=>+k>=w.from&&+k<=w.to).reduce((a,[,v])=>a+v,0);
+    c.innerHTML=`<div class="wh">${w.flag} ${w.title}<span>⭐ ${got}/${(w.to-w.from+1)*3}</span></div>`;
+    if(!w.open){
+      const need = ['','1 друг или 20 ⭐','3 друга','1 друг, оплативший VPN'][i];
+      c.innerHTML+=`<div class="lockbox">🔒 <div>Откроется: <b>${need}</b></div></div><button class="btn ghost" data-go="friends">👥 Пригласить друзей</button>`;
+    } else {
+      const g=document.createElement('div'); g.className='grid';
+      for(let l=w.from;l<=w.to;l++){
+        const b=document.createElement('div'); const st=S.stars[l]||0;
+        const open = l===1 || S.best>=l-1;
+        b.className='lv'+(open?'':' lock')+(open&&l===S.best+1?' next':'');
+        b.innerHTML=`${open?l:'🔒'}<i>${'★'.repeat(st)}</i>`;
+        if(open) b.onclick=()=>play(l);
+        g.appendChild(b);
+      }
+      c.appendChild(g);
+    }
+    W.appendChild(c);
+  });
+  const inf=document.createElement('div'); inf.className='card inf';
+  inf.innerHTML=`<div class="wh">🌍 Бесконечный режим<span>рекорд ${S.best_inf} м</span></div>`+
+    (S.sub?`<button class="btn" id="infBtn">▶ Играть</button>`:`<div class="lockbox">🔒 <div>Доступно с активной подпиской <b>VAYNAH VPN</b></div></div><button class="btn ghost" id="buyBtn">⚡ Оформить подписку</button>`);
+  W.appendChild(inf);
+  if($('infBtn')) $('infBtn').onclick=()=>play(0);
+  if($('buyBtn')) $('buyBtn').onclick=()=>{ tg?tg.openTelegramLink('https://t.me/'+S.bot):0; tg&&tg.close(); };
+  W.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>tab(b.dataset.go));
+  $('fS').textContent=S.friends.started; $('fV').textContent=S.friends.vpn; $('fP').textContent=S.friends.paid;
+  $('rK').textContent=S.keys;
+  $('rInfo').textContent=`Курс: ${S.redeem.rate} 🔑 = 1 день. В этом месяце можно ещё ${S.redeem.left} из ${S.redeem.cap} дн.`;
+  $('red1').disabled = S.keys<S.redeem.rate || S.redeem.left<1;
+}
+async function refresh(){ try{ S=await api('state'); render(); }catch(e){ fatal(e); } }
+function fatal(e){
+  if(e.status===401||!INIT){ document.body.innerHTML='<div class="scr" style="display:flex;align-items:center;justify-content:center;text-align:center"><div><div class="logo">VAYNAH <b style="color:#1685FF">Runner</b></div><p class="sub">Открой игру через бота <b>@IngVertuVpn_bot</b> → «🎮 Игра»</p><a class="btn" href="https://t.me/IngVertuVpn_bot">Открыть бота</a></div></div>'; return; }
+  toast('Ошибка сети, попробуй ещё раз');
+}
+function tab(t){
+  ['home','friends','rewards','top'].forEach(x=>$(x).classList.toggle('hide',x!==t));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+  if(t==='top') loadTop();
+}
+document.querySelectorAll('.tab').forEach(x=>x.onclick=()=>{haptic();tab(x.dataset.t)});
+$('inviteBtn').onclick=()=>{ const u=encodeURIComponent(S.ref_link), t=encodeURIComponent('Подключайся к VAYNAH VPN — быстрый и защищённый VPN ⚡ А ещё там есть игра 🎮');
+  const link=`https://t.me/share/url?url=${u}&text=${t}`; tg?tg.openTelegramLink(link):window.open(link); };
+$('copyBtn').onclick=async()=>{ try{ await navigator.clipboard.writeText(S.ref_link); toast('Ссылка скопирована'); }catch(e){ toast(S.ref_link); } };
+$('red1').onclick=async()=>{ $('red1').disabled=true; try{ const r=await api('redeem',{days:1}); S=r; render(); haptic('medium'); toast('🎉 +1 день VPN! Подписка до '+new Date(r.redeemed.until*1000).toLocaleDateString('ru')); }catch(e){ toast(e.message==='cap'?'Лимит обмена на этот месяц исчерпан':e.message==='keys'?'Не хватает ключей':'Не получилось, попробуй позже'); render(); } };
+async function loadTop(){
+  try{ const r=await api('top'); const L=$('tList');
+    L.innerHTML = r.top.length? r.top.map((x,i)=>`<div class="row ${x.me?'me':''}"><div>${['🥇','🥈','🥉'][i]||(i+1)+'.'} ${esc(x.name)}</div><div class="r">${x.keys} 🔑</div></div>`).join('') : '<div class="sub">Пока никого — стань первым!</div>';
+    L.innerHTML += `<div class="row"><div>Ты</div><div class="r">${r.me.place?r.me.place+' место · ':''}${r.me.keys} 🔑</div></div>`;
+    const left=r.ends-Date.now()/1000; $('tInfo').textContent=`Топ-3 получают +7 / +3 / +1 день VPN. До конца недели ${Math.floor(left/86400)} д ${Math.floor(left%86400/3600)} ч`;
+  }catch(e){}
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ------------------------------------------------ 3D
+const canvas=$('gl');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x070617); scene.fog=new THREE.Fog(0x070617,18,70);
+const cam=new THREE.PerspectiveCamera(70,1,0.1,120);
+scene.add(new THREE.AmbientLight(0x8080ff,0.55));
+const dl=new THREE.DirectionalLight(0xffffff,0.9); dl.position.set(2,6,4); scene.add(dl);
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); cam.aspect=w/h; cam.fov = w/h<0.7?78:65; cam.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+
+const LX=[-1.7,0,1.7], TW=6.2, TH=4.2;
+const M = {
+  wall:new THREE.MeshStandardMaterial({color:0xff2d55,emissive:0xff1040,emissiveIntensity:.8,roughness:.4}),
+  low:new THREE.MeshStandardMaterial({color:0xff8a00,emissive:0xff6a00,emissiveIntensity:.8}),
+  high:new THREE.MeshStandardMaterial({color:0xff5cf0,emissive:0xd21fd0,emissiveIntensity:.8}),
+  key:new THREE.MeshStandardMaterial({color:0xffd34d,emissive:0xffb800,emissiveIntensity:.9,metalness:.6,roughness:.3}),
+  shield:new THREE.MeshStandardMaterial({color:0x3ec5ff,emissive:0x1ea0ff,emissiveIntensity:1,transparent:true,opacity:.85}),
+  magnet:new THREE.MeshStandardMaterial({color:0xff4dd2,emissive:0xff00b4,emissiveIntensity:1}),
+  boost:new THREE.MeshStandardMaterial({color:0x3dffa8,emissive:0x00ff88,emissiveIntensity:1}),
+  frame:new THREE.LineBasicMaterial({color:0x5a3bff,transparent:true,opacity:.75}),
+  floor:new THREE.MeshStandardMaterial({color:0x0d0b2a,roughness:.9}),
+  lane:new THREE.MeshBasicMaterial({color:0x3ec5ff,transparent:true,opacity:.18}),
+  fin:new THREE.MeshStandardMaterial({color:0x3dffa8,emissive:0x00ff88,emissiveIntensity:1.2,transparent:true,opacity:.55}),
+};
+function labelTex(txt,bg,fg){ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d');
+  x.fillStyle=bg; x.fillRect(0,0,128,128); x.strokeStyle=fg; x.lineWidth=8; x.strokeRect(6,6,116,116);
+  x.fillStyle=fg; x.font='bold 54px Arial'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(txt,64,68); return new THREE.CanvasTexture(c); }
+M.cap=new THREE.MeshStandardMaterial({map:labelTex('?','#3a1a7a','#c9a4ff'),emissive:0x5a2bd0,emissiveIntensity:.5,transparent:true,opacity:.9});
+M.ad=new THREE.MeshStandardMaterial({map:labelTex('AD','#53D8FF','#2a1800'),emissive:0xffb800,emissiveIntensity:.35});
+M.fw=new THREE.MeshStandardMaterial({map:labelTex('🛡','#ff2d55','#ffffff'),emissive:0xff1040,emissiveIntensity:.6});
+const G = {
+  wall:new THREE.BoxGeometry(1.5,2.3,.5), low:new THREE.BoxGeometry(TW-.4,.65,.5), high:new THREE.BoxGeometry(TW-.4,1.5,.5),
+  key:new THREE.TorusGeometry(.26,.09,8,18), orb:new THREE.IcosahedronGeometry(.32,1), cube:new THREE.BoxGeometry(1.3,1.3,1.3),
+};
+const world=new THREE.Group(); scene.add(world);
+// тоннель: рамки + пол + полосы (переиспользуем)
+const frames=[]; const FR=28, FSTEP=4;
+const frameGeo=(()=>{ const s=new THREE.Shape(); const w=TW/2,h=TH; const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-w,0,0),new THREE.Vector3(-w,h,0),new THREE.Vector3(w,h,0),new THREE.Vector3(w,0,0),new THREE.Vector3(-w,0,0)]); return g; })();
+for(let i=0;i<FR;i++){ const l=new THREE.Line(frameGeo,M.frame); l.position.z=-i*FSTEP; scene.add(l); frames.push(l); }
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(TW,400),M.floor); floor.rotation.x=-Math.PI/2; floor.position.z=-150; scene.add(floor);
+const lanes=[-0.85,0.85].map(x=>{ const m=new THREE.Mesh(new THREE.PlaneGeometry(.05,400),M.lane); m.rotation.x=-Math.PI/2; m.position.set(x,.01,-150); scene.add(m); return m; });
+// частицы-данные
+const pN=260, pg=new THREE.BufferGeometry(), pp=new Float32Array(pN*3);
+for(let i=0;i<pN;i++){ pp[i*3]=(Math.random()-.5)*TW*1.1; pp[i*3+1]=Math.random()*TH; pp[i*3+2]=-Math.random()*90; }
+pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+const parts=new THREE.Points(pg,new THREE.PointsMaterial({color:0x7fd8ff,size:.06,transparent:true,opacity:.8})); scene.add(parts);
+// игрок
+const player=new THREE.Group(); scene.add(player);
+const core=new THREE.Mesh(new THREE.IcosahedronGeometry(.38,1),new THREE.MeshStandardMaterial({color:0x9be7ff,emissive:0x2bb8ff,emissiveIntensity:1.1,flatShading:true,roughness:.2,metalness:.3}));
+core.position.y=.5; player.add(core);
+const halo=new THREE.Mesh(new THREE.TorusGeometry(.5,.03,8,40),new THREE.MeshBasicMaterial({color:0x3ec5ff,transparent:true,opacity:.7})); halo.position.y=.5; player.add(halo);
+const shieldM=new THREE.Mesh(new THREE.SphereGeometry(.78,20,16),new THREE.MeshBasicMaterial({color:0x3ec5ff,transparent:true,opacity:.22})); shieldM.position.y=.5; shieldM.visible=false; player.add(shieldM);
+const pl=new THREE.PointLight(0x3ec5ff,2.2,7); pl.position.y=1; player.add(pl);
+const finM=new THREE.Mesh(new THREE.BoxGeometry(TW,TH,.3),M.fin); scene.add(finM);
+
+// ------------------------------------------------ игра
+let R=null; // текущий забег
+function buildLevel(lv){
+  while(world.children.length) world.remove(world.children[0]);
+  const items=[];
+  for(const o of lv.objs){
+    const z=-o.z; let ms=[];
+    if(o.t==='wall') ms=o.l.map(l=>{ const m=new THREE.Mesh(G.wall,M.wall); m.position.set(LX[l],1.15,z); return {m,l,kind:'wall'}; });
+    else if(o.t==='low'){ const m=new THREE.Mesh(G.low,M.low); m.position.set(0,.33,z); ms=[{m,l:-1,kind:'low'}]; }
+    else if(o.t==='high'){ const m=new THREE.Mesh(G.high,M.high); m.position.set(0,.72+.75,z); ms=[{m,l:-1,kind:'high'}]; }
+    else if(o.t==='cap'){ const m=new THREE.Mesh(G.cube,M.cap); m.position.set(LX[o.l[0]],.7,z); ms=[{m,l:o.l[0],kind:'cap'}]; }
+    else if(o.t==='ad'){ const m=new THREE.Mesh(G.cube,M.ad); m.position.set(LX[o.l[0]],.7,z); ms=[{m,l:o.l[0],kind:'ad'}]; }
+    else if(o.t==='key'){ const m=new THREE.Mesh(G.key,M.key); m.position.set(LX[o.l[0]],.6,z); ms=[{m,l:o.l[0],kind:'key'}]; }
+    else { const m=new THREE.Mesh(G.orb,M[o.t]); m.position.set(LX[o.l[0]],.7,z); ms=[{m,l:o.l[0],kind:o.t}]; }
+    ms.forEach(x=>{ x.z=o.z; x.alive=true; world.add(x.m); items.push(x); });
+  }
+  items.sort((a,b)=>a.z-b.z);
+  finM.position.set(0,TH/2,-lv.length); finM.visible = lv.level!==0;
+  return items;
+}
+async function play(level){
+  haptic('medium');
+  let r; try{ r=await api('start',{level}); }catch(e){
+    if(e.message==='energy'){ showModal(`<div class="big">⚡ Нет энергии</div><p class="sub">Следующая через ${fmtT(e.data.next||0)}. Пригласи друга — сразу +3 ⚡, а за друга с VPN +10 ⚡</p><button class="btn" id="mInv">📨 Пригласить друга</button><button class="btn ghost" id="mClose">Ок</button>`);
+      $('mInv').onclick=()=>{hideModal();tab('friends');$('inviteBtn').click();}; $('mClose').onclick=hideModal; return; }
+    if(e.message==='locked'){ toast('Уровень закрыт'); return; }
+    return fatal(e);
+  }
+  S.energy=r.energy; render();
+  const lv=r.run;
+  R={lv, items:buildLevel(lv), i0:0, dist:0, v:lv.speed, lane:1, x:LX[1], y:0, vy:0, slide:0, lives:3, keys:0,
+     shield:0, magnet:0, boost:0, slow:0, ad:0, inv:0, t0:performance.now(), over:false, started:false, cd:3};
+  ['home','friends','rewards','top','tabs'].forEach(x=>$(x).classList.add('hide'));
+  canvas.classList.remove('hide'); $('hudWrap').classList.remove('hide'); $('ad').classList.add('hide');
+  $('hLvl').textContent = level===0?'∞ режим':'Ур. '+level; $('hKeys').textContent='0'; $('hLives').textContent='❤️❤️❤️'; $('buffs').textContent='';
+  $('hint').classList.remove('hide'); setTimeout(()=>$('hint').classList.add('hide'),3500);
+  last=performance.now(); loop();
+}
+function move(dir){
+  if(!R||R.over||!R.started) return;
+  if(dir==='l'&&R.lane>0){R.lane--;haptic();}
+  else if(dir==='r'&&R.lane<2){R.lane++;haptic();}
+  else if(dir==='u'&&R.y<=0.001){R.vy=9.2;R.slide=0;haptic();}
+  else if(dir==='d'){ if(R.y>0) R.vy=-14; R.slide=.65; haptic(); }
+}
+let tx=0,ty=0,tt=0;
+addEventListener('touchstart',e=>{ const t=e.touches[0]; tx=t.clientX; ty=t.clientY; tt=Date.now(); },{passive:true});
+addEventListener('touchend',e=>{ if(!R) return; const t=e.changedTouches[0]; const dx=t.clientX-tx, dy=t.clientY-ty;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<24) return; if(Math.abs(dx)>Math.abs(dy)) move(dx<0?'l':'r'); else move(dy<0?'u':'d'); },{passive:true});
+addEventListener('keydown',e=>{ const k={ArrowLeft:'l',a:'l',ArrowRight:'r',d:'r',ArrowUp:'u',w:'u',' ':'u',ArrowDown:'d',s:'d'}[e.key]; if(k){move(k);e.preventDefault();} });
+
+let last=0, raf=0;
+function msg(t,ms){ $('msg').textContent=t; clearTimeout(msg.t); if(ms) msg.t=setTimeout(()=>$('msg').textContent='',ms); }
+function hit(kind){
+  if(R.inv>0) return;
+  if(R.shield>0){ R.shield=0; R.inv=.8; msg('🛡 Щит спас!',900); haptic('heavy'); return; }
+  R.lives--; R.inv=1.1; haptic('err'); $('flash').style.opacity=.55; setTimeout(()=>$('flash').style.opacity=0,160);
+  $('hLives').textContent='❤️'.repeat(Math.max(0,R.lives))+'🖤'.repeat(3-Math.max(0,R.lives));
+  R.v=Math.max(R.lv.speed*.7,R.v*.8);
+  if(R.lives<=0) end(false);
+}
+function loop(){
+  raf=requestAnimationFrame(loop);
+  const t=performance.now(); let dt=Math.min(.05,(t-last)/1000); last=t;
+  if(!R) return;
+  if(!R.started){ R.cd-=dt; msg(R.cd>0?String(Math.ceil(R.cd)):'GO!'); if(R.cd<=0){R.started=true; R.t0=performance.now(); msg('GO!',600);} }
+  else if(!R.over){
+    // скорость
+    let base = R.lv.speed + (R.lv.accel? R.dist*R.lv.accel : 0); base=Math.min(base,R.lv.vmax);
+    let tv = base*(R.boost>0?1.5:1)*(R.slow>0?.6:1);
+    R.v += (tv-R.v)*Math.min(1,dt*3);
+    R.dist += R.v*dt;
+    ['shield','magnet','boost','slow','ad','inv','slide'].forEach(k=>{ if(R[k]>0) R[k]=Math.max(0,R[k]-dt); });
+    if(R.shield===0) shieldM.visible=false;
+    // физика
+    R.vy-=26*dt; R.y=Math.max(0,R.y+R.vy*dt); if(R.y===0) R.vy=0;
+    R.x += (LX[R.lane]-R.x)*Math.min(1,dt*14);
+    const ph = R.slide>0?.45:.95;  // высота тела
+    // коллизии
+    const pz=R.dist;
+    while(R.i0<R.items.length && R.items[R.i0].z < pz-3) R.i0++;
+    for(let i=R.i0;i<R.items.length;i++){
+      const it=R.items[i]; if(it.z>pz+ (R.magnet>0?6:1)) break; if(!it.alive) continue;
+      const dz=Math.abs(it.z-pz);
+      const laneHit = it.l===-1 || Math.abs(LX[it.l]-R.x)<1.0;
+      if(it.kind==='key'){ if((dz<.7&&laneHit&&R.y<1.6)||(R.magnet>0&&it.z-pz<6&&it.z-pz>-1)){ it.alive=false; it.m.visible=false; R.keys++; $('hKeys').textContent=R.keys; haptic('light'); } continue; }
+      if(dz>.45) continue;
+      if(it.kind==='wall'){ if(laneHit){ it.alive=false; hit('wall'); } }
+      else if(it.kind==='low'){ if(R.y<.62){ it.alive=false; hit('low'); } }
+      else if(it.kind==='high'){ if(R.y+ph>.72){ it.alive=false; hit('high'); } }
+      else if(it.kind==='cap'){ if(laneHit){ it.alive=false; it.m.visible=false; R.slow=1.6; msg('🤖 Капча! Медленно…',1200); haptic('medium'); } }
+      else if(it.kind==='ad'){ if(laneHit){ it.alive=false; it.m.visible=false; R.ad=1.8; haptic('medium'); } }
+      else if(laneHit&&R.y<1.6){ it.alive=false; it.m.visible=false; R[it.kind]=it.kind==='shield'?12:it.kind==='magnet'?7:3.5; if(it.kind==='shield') shieldM.visible=true; msg({shield:'🛡 Щит',magnet:'🧲 Магнит',boost:'🚀 Ускорение'}[it.kind],900); haptic('medium'); }
+    }
+    $('ad').classList.toggle('hide',!(R.ad>0));
+    $('buffs').textContent=[R.shield>0?'🛡':'',R.magnet>0?'🧲 '+R.magnet.toFixed(0):'',R.boost>0?'🚀':'',R.slow>0?'🐢':''].filter(Boolean).join('  ');
+    $('prog').firstChild.style.width = (R.lv.level===0? Math.min(100,R.dist/R.lv.length*100) : Math.min(100,R.dist/R.lv.length*100))+'%';
+    if(R.lv.level===0) $('hLvl').textContent='∞ '+Math.floor(R.dist)+' м';
+    if(R.dist>=R.lv.length) end(R.lv.level!==0);
+  }
+  // визуал
+  const pz=-R.dist;
+  player.position.set(R.x,R.y,pz);
+  core.scale.y = R.slide>0?.55:1; core.position.y = R.slide>0?.3:.5; halo.position.y=core.position.y;
+  core.rotation.x-=dt*6; core.rotation.y+=dt*2; halo.rotation.z+=dt*3;
+  core.material.opacity=1; core.visible = !(R.inv>0 && Math.floor(t/80)%2);
+  cam.position.set(R.x*.5,2.7+R.y*.3,pz+6.2); cam.lookAt(R.x*.3,1.0,pz-6);
+  for(const f of frames){ if(f.position.z>pz+6) f.position.z-=FR*FSTEP; }
+  floor.position.z=pz-150; lanes.forEach(l=>l.position.z=pz-150);
+  const a=pg.attributes.position.array; for(let i=0;i<pN;i++){ a[i*3+2]+=R.v*dt*.6; if(a[i*3+2]>pz+5) a[i*3+2]=pz-85-Math.random()*5; } pg.attributes.position.needsUpdate=true;
+  for(let i=R.i0;i<Math.min(R.items.length,R.i0+60);i++){ const it=R.items[i]; if(it.kind==='key') it.m.rotation.y+=dt*4; else if(it.kind!=='wall'&&it.kind!=='low'&&it.kind!=='high') it.m.rotation.y+=dt*1.5; }
+  renderer.render(scene,cam);
+}
+async function end(done){
+  if(R.over) return; R.over=true; haptic(done?'heavy':'err');
+  msg(done?'🟢 Сервер достигнут!':'💥 Соединение разорвано',0);
+  const body={run:R.lv.run,done,keys:R.keys,dist:Math.floor(R.dist)};
+  let res=null; try{ res=await api('finish',body); S=res; }catch(e){}
+  setTimeout(()=>{
+    const r=res&&res.result; const lvl=R.lv.level;
+    let html='';
+    if(lvl===0) html=`<div class="big">🌍 ${r?r.dist:Math.floor(R.dist)} м</div><p class="sub">${r&&r.new_best?'Новый рекорд! 🎉':'Рекорд: '+(S?S.best_inf:'-')+' м'}</p>`;
+    else if(r&&r.done) html=`<div class="big">Уровень ${lvl} пройден!</div><div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(3-r.stars)}</div>`;
+    else html=`<div class="big">💥 Не прошёл</div><p class="sub">Горы ждут — попробуй ещё раз</p>`;
+    html+=`<p>🔑 +${r?r.keys:R.keys}  ·  всего ${S?S.keys:'–'}</p>`;
+    const next = lvl>0 && r && r.done && lvl<60;
+    html+= next?`<button class="btn" id="mNext">▶ Уровень ${lvl+1}</button>`:`<button class="btn" id="mAgain">↻ Ещё раз</button>`;
+    html+=`<button class="btn ghost" id="mMenu">🏠 Меню</button>`;
+    if(S && !S.infinite) html+=`<p class="sub" style="margin-top:10px">⚡ ${S.energy}/${S.emax}</p>`;
+    showModal(html);
+    const go=l=>{ hideModal(); exitGame(); if(S&&!S.infinite&&S.energy<=0){ play(l); } else play(l); };
+    if($('mNext')) $('mNext').onclick=()=>{ const l=lvl+1; const wi=S.worlds.findIndex(w=>l>=w.from&&l<=w.to); if(wi>=0&&!S.worlds[wi].open){ hideModal(); exitGame(); tab('home'); toast('🔒 Следующий мир откроется за друзей'); return; } go(l); };
+    if($('mAgain')) $('mAgain').onclick=()=>go(lvl);
+    $('mMenu').onclick=()=>{ hideModal(); exitGame(); };
+  }, 900);
+}
+function exitGame(){ cancelAnimationFrame(raf); R=null; msg(''); canvas.classList.add('hide'); $('hudWrap').classList.add('hide'); $('tabs').classList.remove('hide'); tab('home'); render(); }
+function showModal(h){ $('mBody').innerHTML=h; $('modal').classList.remove('hide'); }
+function hideModal(){ $('modal').classList.add('hide'); }
+if(tg&&tg.BackButton){ tg.onEvent('backButtonClicked',()=>{ if(R&&!R.over){ R.over=true; exitGame(); } }); }
+
+if(!INIT) fatal({status:401}); else refresh();
+</script>
+</body></html>

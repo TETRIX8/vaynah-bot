@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>VAYNAH VPN — о проекте</title>
+<meta name="description" content="VAYNAH VPN: как устроен сервис, что умеет бот, на чём держится стабильность.">
+<style>
+:root{
+  --bg:#05080a;--bg2:#0b1412;--card:#0e1714;--line:rgba(255,255,255,.09);
+  --tx:#e8f3ee;--mut:#9fb3aa;--dim:#6f857b;--g:#4ade80;--t:#2dd4bf;--gd:#16a34a;--amb:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--g);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+/* hero */
+.hero{position:relative;overflow:hidden;padding:84px 0 70px;background:
+  radial-gradient(900px 420px at 80% -10%,rgba(45,212,191,.16),transparent 60%),
+  radial-gradient(700px 380px at 0% 10%,rgba(74,222,128,.14),transparent 60%),
+  linear-gradient(180deg,var(--bg2),var(--bg))}
+.hero:before{content:"";position:absolute;inset:0;opacity:.06;pointer-events:none;
+  background-image:linear-gradient(var(--t) 1px,transparent 1px),linear-gradient(90deg,var(--t) 1px,transparent 1px);background-size:44px 44px;
+  mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.brand{display:flex;align-items:center;gap:14px;position:relative}
+.brand svg{flex:none}
+.brand b{font-size:22px;letter-spacing:3px;font-weight:900}
+.brand span{display:block;font-size:12px;letter-spacing:5px;color:var(--g);font-weight:700}
+h1{position:relative;margin-top:38px;font-size:clamp(34px,6vw,62px);line-height:1.05;font-weight:900;letter-spacing:-.5px;max-width:820px}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--g),var(--t));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{position:relative;margin-top:20px;font-size:clamp(17px,2.2vw,20px);color:var(--mut);max-width:720px}
+.cta{position:relative;display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:14px;font-weight:800;font-size:16px}
+.btn.p{background:linear-gradient(135deg,var(--g),var(--gd));color:#04210f;box-shadow:0 8px 30px rgba(74,222,128,.25)}
+.btn.s{border:1.5px solid var(--line);color:var(--tx);background:rgba(255,255,255,.03)}
+.stats{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:48px}
+.stat{padding:18px 18px 16px;border-radius:18px;background:rgba(14,23,20,.75);border:1px solid var(--line);backdrop-filter:blur(6px)}
+.stat b{display:block;font-size:30px;font-weight:900;background:linear-gradient(180deg,#fff,#bfd3ca);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:14px;color:var(--mut)}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:rgba(5,8,10,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav a{flex:none;padding:7px 13px;border-radius:999px;color:var(--mut);font-size:14px;font-weight:600}
+nav a:hover{background:rgba(74,222,128,.1);color:var(--g)}
+/* sections */
+section{padding:70px 0 10px}
+.kicker{font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--g);font-weight:800}
+h2{margin-top:8px;font-size:clamp(26px,3.6vw,38px);font-weight:900;line-height:1.15}
+.sub{margin-top:10px;color:var(--mut);max-width:760px;font-size:17px}
+.grid{display:grid;gap:16px;margin-top:28px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{position:relative;padding:22px;border-radius:20px;background:linear-gradient(180deg,#0f1a16,#0b1210);border:1px solid var(--line)}
+.card h3{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.card p,.card li{color:var(--mut);font-size:15.5px}
+.card ul{list-style:none;margin-top:8px}
+.card li{padding-left:22px;position:relative;margin:6px 0}
+.card li:before{content:"";position:absolute;left:2px;top:9px;width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,var(--g),var(--t))}
+.ico{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25)}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.5px;padding:3px 9px;border-radius:999px;background:rgba(74,222,128,.12);color:var(--g);border:1px solid rgba(74,222,128,.3)}
+.tag.a{background:rgba(251,191,36,.1);color:var(--amb);border-color:rgba(251,191,36,.3)}
+/* steps */
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+.step{padding:22px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.step:before{counter-increment:s;content:counter(s);display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;
+  font-weight:900;font-size:19px;color:#04210f;background:radial-gradient(circle at 35% 30%,#bbf7d0,var(--g) 55%,var(--gd));box-shadow:0 0 18px rgba(74,222,128,.35);margin-bottom:14px}
+.step b{display:block;font-size:17px;margin-bottom:4px}
+.step p{color:var(--mut);font-size:15px}
+/* tables */
+.tbl{margin-top:26px;border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+th{background:#0f1a16;color:var(--mut);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+td{background:#0a110f}
+tr:last-child td{border-bottom:0}
+td.num{font-weight:800;white-space:nowrap}
+td .mut{color:var(--dim);font-size:13.5px}
+/* diagram */
+.diagram{margin-top:28px;padding:22px;border-radius:22px;background:linear-gradient(180deg,#0b1412,#070d0b);border:1px solid var(--line);overflow-x:auto}
+.diagram svg{display:block;min-width:760px;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;color:var(--mut);font-size:14px}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;margin-right:7px}
+/* timeline */
+.flow{margin-top:26px;display:grid;gap:12px}
+.flow div{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.flow b{flex:none;min-width:118px;color:var(--g);font-weight:800}
+.flow p{color:var(--mut);font-size:15.5px}
+.note{margin-top:22px;padding:16px 18px;border-radius:16px;border:1px dashed rgba(74,222,128,.35);color:var(--mut);font-size:15px;background:rgba(74,222,128,.04)}
+.note b{color:var(--tx)}
+footer{margin-top:80px;padding:44px 0 60px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(74,222,128,.05))}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+footer p{color:var(--dim);font-size:14px}
+@media (max-width:900px){.g3,.g4,.steps,.stats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.g2,.g3,.g4,.steps{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero{padding-top:56px}
+  th,td{padding:11px 12px;font-size:14.5px}.flow div{flex-direction:column;gap:4px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+ <div class="wrap">
+  <div class="brand">
+   <svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4ade80"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs>
+    <path d="M32 4 56 13v17c0 15-10 26-24 30C18 56 8 45 8 30V13z" fill="#0b1412" stroke="url(#lg)" stroke-width="3"/>
+    <path d="M21 22l11 22 11-22" fill="none" stroke="url(#lg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+   <div><b>VAYNAH</b><span>VPN</span></div>
+  </div>
+  <h1>VPN, который <em>не теряет связь</em>, даже когда интернет ограничивают</h1>
+  <p class="lead">VAYNAH VPN — сервис в Telegram: бот продаёт и выдаёт подписку, а одна ссылка подключает телефон или компьютер к серверам в Европе. Если один путь подключения блокируют, у клиента остаются другие. Ниже — как всё устроено и что уже умеет проект.</p>
+  <div class="cta">
+   <a class="btn p" href="https://t.me/MyVainakhBot">Открыть бота @MyVainakhBot</a>
+   <a class="btn s" href="#how">Как это работает ↓</a>
+  </div>
+  <div class="stats">
+   <div class="stat"><b>4</b><span>страны: Германия, Нидерланды, Испания, Финляндия</span></div>
+   <div class="stat"><b>4</b><span>независимых способа подключения</span></div>
+   <div class="stat"><b>5 мин</b><span>интервал автопроверки каждого ключа</span></div>
+   <div class="stat"><b>15 мин</b><span>интервал резервных копий на 4 серверах</span></div>
+  </div>
+ </div>
+</header>
+
+<nav><div class="wrap">
+ <a href="#idea">Идея</a><a href="#client">Путь клиента</a><a href="#how">Как работает</a><a href="#bot">Бот</a>
+ <a href="#plans">Тарифы</a><a href="#admin">Админка</a><a href="#reliable">Надёжность</a><a href="#security">Безопасность</a><a href="#done">Итог</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="idea">
+ <div class="kicker">Задача проекта</div>
+ <h2>Простой VPN для людей, а не для айтишников</h2>
+ <p class="sub">Цель — чтобы человек без технических знаний за пару минут получил рабочий VPN и не думал о блокировках. Всё сложное спрятано внутри: выбор сервера, проверка, переключение на запасные каналы.</p>
+ <div class="grid g3">
+  <div class="card"><h3><span class="ico">📲</span>Всё в Telegram</h3><p>Покупка, пробный период, ключ, инструкции и поддержка — в одном боте. Не нужны сайты, регистрации и пароли.</p></div>
+  <div class="card"><h3><span class="ico">🔗</span>Одна ссылка</h3><p>Клиент получает одну ссылку-подписку. Приложение само подтягивает все серверы и обновляет список, когда мы что-то меняем.</p></div>
+  <div class="card"><h3><span class="ico">🛡</span>Устойчивость</h3><p>Несколько независимых путей до серверов. Блокировка одного пути не оставляет клиента без интернета.</p></div>
+ </div>
+</section>
+
+<section id="client">
+ <div class="kicker">Путь клиента</div>
+ <h2>От первого сообщения до подключения — 4 шага</h2>
+ <div class="steps">
+  <div class="step"><b>Открывает бота</b><p>По ссылке, QR-коду с листовки или от друга. Сразу видит пробный период.</p></div>
+  <div class="step"><b>Берёт пробный или тариф</b><p>Бесплатно на 1–2 дня или оплата через СБП или Telegram Stars.</p></div>
+  <div class="step"><b>Жмёт «Подключить»</b><p>Бот открывает приложение Happ, и подписка добавляется одним касанием.</p></div>
+  <div class="step"><b>Выбирает страну</b><p>Нажимает большую кнопку — VPN работает. Не подключается — выбирает другую страну.</p></div>
+ </div>
+ <p class="note"><b>Поддерживаются</b> iPhone и iPad, Android, Windows и Mac. В боте есть пошаговые инструкции для каждой платформы и быстрые ответы на частые проблемы: «Нет интернета», «Медленно», «Не подключается».</p>
+</section>
+
+<section id="how">
+ <div class="kicker">Как работает</div>
+ <h2>Четыре независимых пути к серверам</h2>
+ <p class="sub">В подписке у каждого клиента лежат ключи разных типов. Они идут к серверам разными дорогами, поэтому заблокировать всё сразу очень сложно.</p>
+
+ <div class="diagram">
+  <svg viewBox="0 0 900 430" role="img" aria-label="Схема подключения">
+   <defs>
+    <linearGradient id="srv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13221d"/><stop offset="1" stop-color="#0b1412"/></linearGradient>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#9fb3aa"/></marker>
+   </defs>
+   <!-- client -->
+   <rect x="20" y="160" width="150" height="110" rx="18" fill="url(#srv)" stroke="rgba(255,255,255,.15)"/>
+   <text x="95" y="203" text-anchor="middle" fill="#e8f3ee" font-size="26">📱</text>
+   <text x="95" y="232" text-anchor="middle" fill="#e8f3ee" font-size="16" font-weight="800">Клиент</text>
+   <text x="95" y="252" text-anchor="middle" fill="#9fb3aa" font-size="12.5">приложение Happ</text>
+   <!-- middle boxes -->
+   <rect x="330" y="30" width="230" height="64" rx="14" fill="url(#srv)" stroke="#4ade80" stroke-opacity=".6"/>
+   <text x="445" y="58" text-anchor="middle" fill="#e8f3ee" font-size="15" font-weight="800">Российский вход</text>
+   <text x="445" y="78" text-anchor="middle" fill="#9fb3aa" font-size="12.5">адрес в РФ, пересылка дальше</text>
+   <rect x="330" y="128" width="230" height="64" rx="14" fill="url(#srv)" stroke="#2dd4bf" stroke-opacity=".6"/>
+   <text x="445" y="156" text-anchor="middle" fill="#e8f3ee" font-size="15" font-weight="800">Прямое подключение</text>
+   <text x="445" y="176" text-anchor="middle" fill="#9fb3aa" font-size="12.5">собственные домены</text>
+   <rect x="330" y="226" width="230" height="64" rx="14" fill="url(#srv)" stroke="#a78bfa" stroke-opacity=".7"/>
+   <text x="445" y="254" text-anchor="middle" fill="#e8f3ee" font-size="15" font-weight="800">Hysteria2 · UDP</text>
+   <text x="445" y="274" text-anchor="middle" fill="#9fb3aa" font-size="12.5">как HTTP/3, быстрый</text>
+   <rect x="330" y="324" width="230" height="64" rx="14" fill="url(#srv)" stroke="#fbbf24" stroke-opacity=".7"/>
+   <text x="445" y="352" text-anchor="middle" fill="#e8f3ee" font-size="15" font-weight="800">Резервные каналы · CDN</text>
+   <text x="445" y="372" text-anchor="middle" fill="#9fb3aa" font-size="12.5">через российские CDN</text>
+   <!-- servers -->
+   <rect x="700" y="60" width="180" height="310" rx="20" fill="url(#srv)" stroke="rgba(255,255,255,.15)"/>
+   <text x="790" y="96" text-anchor="middle" fill="#e8f3ee" font-size="16" font-weight="800">Серверы в Европе</text>
+   <text x="790" y="146" text-anchor="middle" fill="#e8f3ee" font-size="15">🇩🇪 Германия</text>
+   <text x="790" y="190" text-anchor="middle" fill="#e8f3ee" font-size="15">🇳🇱 Нидерланды</text>
+   <text x="790" y="234" text-anchor="middle" fill="#e8f3ee" font-size="15">🇪🇸 Испания</text>
+   <text x="790" y="278" text-anchor="middle" fill="#e8f3ee" font-size="15">🇫🇮 Финляндия</text>
+   <text x="790" y="336" text-anchor="middle" fill="#6f857b" font-size="12.5">→ свободный интернет</text>
+   <!-- links client -> mid -->
+   <path d="M170 195 C250 120 260 62 328 62" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M170 207 C250 180 260 160 328 160" fill="none" stroke="#2dd4bf" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M170 225 C250 240 260 258 328 258" fill="none" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M170 240 C250 300 260 356 328 356" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#ar)"/>
+   <!-- mid -> servers -->
+   <path d="M560 62 C630 62 640 140 698 150" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M560 160 C620 160 640 180 698 190" fill="none" stroke="#2dd4bf" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M560 258 C620 258 640 240 698 232" fill="none" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M560 356 C630 356 640 290 698 280" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#ar)"/>
+   <path d="M445 94 C445 110 445 112 445 112" stroke="none"/>
+  </svg>
+  <div class="legend">
+   <span><i style="background:#4ade80"></i>Reality через РФ — основной, для мобильного</span>
+   <span><i style="background:#2dd4bf"></i>Reality напрямую — для домашнего интернета</span>
+   <span><i style="background:#a78bfa"></i>Hysteria2 — самый быстрый</span>
+   <span><i style="background:#fbbf24"></i>CDN — когда остальное недоступно</span>
+  </div>
+ </div>
+
+ <div class="grid g2">
+  <div class="card"><h3><span class="ico">🟢</span>Reality через российский вход <span class="tag">основной</span></h3>
+   <p>Клиент подключается к российскому адресу, а оттуда трафик уходит в Европу. Для провайдера это выглядит как обычное посещение крупного сайта. Лучший вариант для мобильного интернета.</p></div>
+  <div class="card"><h3><span class="ico">🔷</span>Reality напрямую <span class="tag">«Германия 2»…</span></h3>
+   <p>Подключение сразу к серверу в Европе через наши домены. Работает быстрее на домашнем Wi-Fi и не зависит от российского входа.</p></div>
+  <div class="card"><h3><span class="ico">⚡</span>Hysteria2 <span class="tag">новое</span></h3>
+   <p>Современный протокол на UDP: для провайдера выглядит как HTTP/3, хорошо держит скорость на плохой связи. Есть варианты через российский вход и напрямую. В тестах из РФ — до 30 Мбит/с на отдачу.</p></div>
+  <div class="card"><h3><span class="ico">🟡</span>Резервные каналы через CDN <span class="tag a">резерв</span></h3>
+   <p>Трафик идёт через российские сети доставки контента, как у обычных сайтов. Медленнее остальных (около 3 Мбит/с), зато доступно, когда прямые пути закрыты.</p></div>
+ </div>
+</section>
+
+<section id="bot">
+ <div class="kicker">Бот @MyVainakhBot</div>
+ <h2>Что умеет бот для клиента</h2>
+ <div class="grid g3">
+  <div class="card"><h3><span class="ico">🎁</span>Пробный период</h3><ul><li>1 день бесплатно в боте</li><li>2 дня по ссылке с листовки — после подписки на канал</li><li>Защита от повторного получения</li></ul></div>
+  <div class="card"><h3><span class="ico">💳</span>Оплата</h3><ul><li>СБП — по QR или через приложение банка</li><li>Telegram Stars</li><li>Продление и автопродление</li><li>Страница оплаты на нашем домене</li></ul></div>
+  <div class="card"><h3><span class="ico">🏔</span>Личный кабинет</h3><ul><li>Срок подписки и остаток трафика</li><li>Подключение в одно касание</li><li>Тот же кабинет на веб-странице</li></ul></div>
+  <div class="card"><h3><span class="ico">📱</span>Устройства</h3><ul><li>Список подключённых устройств</li><li>Смена ключа, если ссылку кто-то получил</li><li>Расширение до 5 устройств</li></ul></div>
+  <div class="card"><h3><span class="ico">👥</span>Друзья и промо</h3><ul><li>Реферальная ссылка: дни за приглашённых</li><li>Промокоды</li><li>Программа амбассадоров</li></ul></div>
+  <div class="card"><h3><span class="ico">💬</span>Помощь</h3><ul><li>Инструкции для iPhone, Android, Windows, Mac</li><li>Быстрые решения частых проблем</li><li>Живая поддержка @helpingvpn</li><li>Пользовательское соглашение</li></ul></div>
+ </div>
+</section>
+
+<section id="plans">
+ <div class="kicker">Тарифы</div>
+ <h2>Цены и условия</h2>
+ <div class="tbl"><table>
+  <tr><th>Тариф</th><th>Срок</th><th>Устройств</th><th>Цена</th></tr>
+  <tr><td>🎁 Пробный</td><td>1 день <span class="mut">· по ссылке с листовки — 2 дня</span></td><td>до 3</td><td class="num">бесплатно</td></tr>
+  <tr><td>🔥 Старт <span class="mut">· первая оплата</span></td><td>7 дней</td><td>до 3</td><td class="num">50 ₽</td></tr>
+  <tr><td>📦 Стандарт</td><td>1 мес · 3 мес · 6 мес · 12 мес</td><td>до 3</td><td class="num">199 · 499 · 899 · 1 590 ₽</td></tr>
+  <tr><td>👨‍👩‍👧‍👦 Семейный</td><td>1 мес · 3 мес · 6 мес · 12 мес</td><td>до 5</td><td class="num">299 · 749 · 1 350 · 2 390 ₽</td></tr>
+ </table></div>
+ <p class="note">Цены и сроки меняются в админке без участия программиста. Длинные тарифы выгоднее: год Стандарта — около 133 ₽ в месяц.</p>
+</section>
+
+<section id="admin">
+ <div class="kicker">Управление</div>
+ <h2>Веб-админка: весь бизнес на одном экране</h2>
+ <div class="grid g3">
+  <div class="card"><h3><span class="ico">📊</span>Статистика</h3><p>Пользователи, оплаты, выручка, конверсия из пробного в платный, аналитика по источникам трафика.</p></div>
+  <div class="card"><h3><span class="ico">🎯</span>Маркетинг</h3><p>Промокоды, ссылки с отслеживанием источника, автоворонка напоминаний и рассылки с баннерами.</p></div>
+  <div class="card"><h3><span class="ico">👤</span>Клиенты</h3><p>Поиск пользователя, продление, выдача дней, смена лимита устройств, ответы в поддержку.</p></div>
+  <div class="card"><h3><span class="ico">🔑</span>Ключи</h3><p>Состояние всех ключей в реальном времени: какой работает, какой выключен автоматически, что в резерве.</p></div>
+  <div class="card"><h3><span class="ico">🖥</span>Новые серверы</h3><p>Новый сервер подключается одной кнопкой: установка, настройка, маршруты и ключи — автоматически.</p></div>
+  <div class="card"><h3><span class="ico">👑</span>Админы и амбассадоры</h3><p>Несколько администраторов, партнёрская программа с отдельными условиями.</p></div>
+ </div>
+</section>
+
+<section id="reliable">
+ <div class="kicker">Надёжность</div>
+ <h2>Сервис следит за собой сам</h2>
+ <div class="flow">
+  <div><b>Каждые 5 мин</b><p>Робот проверяет каждый ключ из России так же, как это делает клиент: подключение, скорость, параллельные запросы.</p></div>
+  <div><b>3 сбоя подряд</b><p>Нерабочий ключ сам убирается из подписок. Когда снова заработает — сам возвращается. Админам приходит уведомление в Telegram.</p></div>
+  <div><b>Мало рабочих</b><p>Если рабочих ключей стало меньше нормы, автоматически включаются резервные: Hysteria на другом порту, запасные домены, дополнительные CDN.</p></div>
+  <div><b>Каждые 15 мин</b><p>Зашифрованная резервная копия базы и настроек раскладывается на 4 сервера в разных странах.</p></div>
+  <div><b>Каждую ночь</b><p>Копия реально разворачивается на отдельном сервере и проверяется. Так мы знаем, что из бэкапа можно восстановиться.</p></div>
+  <div><b>Авария</b><p>Если главный сервер упадёт, управление автоматически переезжает на запасной. Проверено на живой системе: около 11 минут до полного восстановления.</p></div>
+ </div>
+ <p class="note"><b>Честно о блокировках.</b> Сделать VPN, который нельзя заблокировать в принципе, невозможно. Реальная цель другая: блокировка одного пути не должна отключать клиента. Этого мы добились: в подписке четыре разных типа подключения, а автоматика за минуты убирает нерабочие и включает резерв.</p>
+</section>
+
+<section id="security">
+ <div class="kicker">Безопасность</div>
+ <h2>Защита серверов и данных</h2>
+ <div class="grid g2">
+  <div class="card"><h3><span class="ico">🔒</span>Серверы</h3><ul><li>Файрвол: открыты только нужные порты</li><li>Защита от подбора паролей (fail2ban)</li><li>Автоматические обновления безопасности</li><li>Управление серверами доступно только с нашей панели</li></ul></div>
+  <div class="card"><h3><span class="ico">🧾</span>Данные</h3><ul><li>Платёжные данные не хранятся — их обрабатывает платёжный сервис</li><li>Резервные копии зашифрованы</li><li>Сертификаты шифрования продлеваются автоматически</li><li>Каждое изменение на серверах — с резервной копией для отката</li></ul></div>
+ </div>
+</section>
+
+<section id="done">
+ <div class="kicker">Итог</div>
+ <h2>Что сдаётся</h2>
+ <div class="tbl"><table>
+  <tr><th>Часть</th><th>Что сделано</th><th>Статус</th></tr>
+  <tr><td>Telegram-бот</td><td>Продажа, пробный период, кабинет, устройства, рефералы, промо, поддержка</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Оплата</td><td>СБП, Telegram Stars, своя страница оплаты</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Серверы</td><td>Германия, Нидерланды, Испания, Финляндия + российский вход</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Протоколы</td><td>Reality (через РФ и напрямую), Hysteria2, каналы через CDN</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Автопроверка ключей</td><td>Проверка каждые 5 минут, автоотключение и автовключение резерва</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Бэкапы и аварийный режим</td><td>Копии каждые 15 минут, ночная проверка восстановления, переезд на запасной сервер</td><td><span class="tag">проверено</span></td></tr>
+  <tr><td>Веб-админка</td><td>Статистика, маркетинг, клиенты, ключи, новые серверы</td><td><span class="tag">работает</span></td></tr>
+  <tr><td>Реклама</td><td>Листовка A5 с QR-кодом на пробный период</td><td><span class="tag">готово</span></td></tr>
+ </table></div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+ <div class="brand"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 56 13v17c0 15-10 26-24 30C18 56 8 45 8 30V13z" fill="#0b1412" stroke="#4ade80" stroke-width="3"/><path d="M21 22l11 22 11-22" fill="none" stroke="#4ade80" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b style="font-size:17px">VAYNAH</b><span>VPN</span></div></div>
+ <p>Бот: <a href="https://t.me/MyVainakhBot">@MyVainakhBot</a> · Поддержка: <a href="https://t.me/helpingvpn">@helpingvpn</a> · Ноябрь 2026</p>
+</div></footer>
+</body>
+</html>

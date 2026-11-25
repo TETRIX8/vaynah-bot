@@ -1,0 +1,130 @@
+{
+ "panel_ts": 1795640439,
+ "full_ts": 1795583207,
+ "version": "b045b400ede45924",
+ "manifest": {
+  "ts": 1795583213,
+  "bot_version": "b045b400ede45924",
+  "services": {
+   "ingvertuvpn-bot.service": "active",
+   "ingvertuvpn-redirector.service": "active",
+   "vertu-backup.service": "inactive",
+   "vertu-infra.service": "active",
+   "vertu-keywatch.service": "active",
+   "vertu-subauto.service": "active"
+  },
+  "containers": [
+   {
+    "name": "remnawave",
+    "image": "remnawave/backend:3",
+    "status": "Up 30 hours (healthy)"
+   },
+   {
+    "name": "remnawave-db",
+    "image": "postgres:18.4",
+    "status": "Up 30 hours (healthy)"
+   },
+   {
+    "name": "remnanode",
+    "image": "remnawave/node:latest",
+    "status": "Up 30 hours"
+   },
+   {
+    "name": "remnawave-local-proxy",
+    "image": "nginx:1.30",
+    "status": "Up 30 hours"
+   },
+   {
+    "name": "remnawave-redis",
+    "image": "valkey/valkey:9-alpine",
+    "status": "Up 30 hours (healthy)"
+   }
+  ],
+  "python": "3.12.3"
+ },
+ "verify": {
+  "bot": {
+   "ok": true,
+   "info": "пользователей 51",
+   "ts": 1795643142,
+   "file": "bot-20261125-2145.db.gz.enc"
+  },
+  "panel": {
+   "ok": true,
+   "info": "481 КБ SQL, хостов 2",
+   "ts": 1795640439,
+   "file": "panel-20261125-2100.sql.gz.enc"
+  },
+  "full": {
+   "ok": true,
+   "info": "файлов 592",
+   "ts": 1795583207,
+   "file": "full-20261125-0507.tar.gz.enc"
+  }
+ },
+ "pruned": 0,
+ "targets": {
+  "DE": {
+   "ip": "194.5.65.28",
+   "fails": 0,
+   "ok": true,
+   "err": "",
+   "ts": 1795643142,
+   "took": 5.5,
+   "files": 97,
+   "size": 210578450
+  },
+  "ES": {
+   "ip": "195.96.132.187",
+   "fails": 0,
+   "ok": true,
+   "err": "",
+   "ts": 1795643142,
+   "took": 4.9,
+   "files": 95,
+   "size": 210577630
+  },
+  "FI": {
+   "ip": "91.205.220.23",
+   "fails": 0,
+   "ok": true,
+   "err": "",
+   "ts": 1795643142,
+   "took": 6.4,
+   "files": 95,
+   "size": 210577630
+  },
+  "RU": {
+   "ip": "194.67.120.56",
+   "fails": 0,
+   "ok": true,
+   "err": "",
+   "ts": 1795643142,
+   "took": 6.6,
+   "files": 95,
+   "size": 210577630
+  },
+  "TEST": {
+   "ip": "45.90.16.220",
+   "fails": 0,
+   "ok": true,
+   "err": "",
+   "ts": 1795643142,
+   "took": 11.0,
+   "files": 95,
+   "size": 210577630
+  }
+ },
+ "last_run": 1795643142,
+ "last_errors": [],
+ "latest": {
+  "bot": "bot-20261125-2145.db.gz.enc",
+  "panel": "panel-20261125-2100.sql.gz.enc",
+  "full": "manifest-20261125-0551.json"
+ },
+ "counts": {
+  "bot": 72,
+  "panel": 19,
+  "full": 4
+ }
+}

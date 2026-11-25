@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#020a06">
+<title>VAYNAH VPN — оплата</title>
+<style>
+:root{--g:#39ff83;--g2:#13d36a;--ink:#020a06;--t:#f2fff7;--m:#9fc4ad;--glass:rgba(10,40,24,.55);--ln:rgba(57,255,131,.22);--o:#ffb03a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--ink);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif}
+body{min-height:100svh;overflow-x:hidden}
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.sky .mt{position:absolute;inset:auto -10% 0;height:60vh;background:url(/static/v/mountains.webp) center bottom/cover no-repeat;opacity:.35;filter:saturate(1.2) hue-rotate(40deg);animation:drift 38s ease-in-out infinite alternate;mask-image:linear-gradient(to top,#000 40%,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;mix-blend-mode:screen}
+.b1{width:70vmax;height:70vmax;left:-25vmax;top:-30vmax;background:radial-gradient(circle,#0fd968 0,transparent 62%);animation:f1 18s ease-in-out infinite alternate}
+.b2{width:55vmax;height:55vmax;right:-25vmax;top:12vh;background:radial-gradient(circle,#0b7d6a 0,transparent 60%);animation:f2 22s ease-in-out infinite alternate}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0,transparent 40%,rgba(0,0,0,.7))}
+@keyframes drift{to{transform:translateX(6%) scale(1.06)}}@keyframes f1{to{transform:translate(12vw,10vh) scale(1.15)}}@keyframes f2{to{transform:translate(-14vw,-6vh) scale(.9)}}
+.wrap{position:relative;z-index:1;max-width:440px;min-height:100svh;margin:auto;padding:max(14px,env(safe-area-inset-top)) 20px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;height:46px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.06em;font-size:15px}
+.brand img{width:30px;height:30px;border-radius:50%;box-shadow:0 0 14px #39ff8388}.brand b{color:var(--g);text-shadow:0 0 12px #39ff8399}
+.secure{display:flex;align-items:center;gap:6px;font-size:12px;color:#bfe9cf;font-weight:700}
+.secure svg{width:14px;height:14px;stroke:var(--g);fill:none;stroke-width:2.2}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 0}
+.view{display:none;text-align:center}.view.on{display:block}
+.view.on>*{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.view.on>*:nth-child(2){animation-delay:.07s}.view.on>*:nth-child(3){animation-delay:.14s}.view.on>*:nth-child(4){animation-delay:.21s}.view.on>*:nth-child(5){animation-delay:.28s}
+@keyframes rise{from{opacity:0;transform:translateY(18px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.card{position:relative;border-radius:24px;padding:22px 20px;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;margin-bottom:16px}
+.card:before{content:"";position:absolute;inset:0;border-radius:24px;padding:1.2px;background:conic-gradient(from var(--a,0deg),#39ff83,transparent 25%,transparent 50%,#39ff8399 75%,#39ff83);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:rot 6s linear infinite;pointer-events:none}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes rot{to{--a:360deg}}
+.plan{display:flex;align-items:center;gap:12px;text-align:left}
+.plan img{width:52px;height:52px;border-radius:50%;box-shadow:0 0 20px #39ff8366}
+.plan small{display:block;color:var(--m);font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.plan b{font-size:18px}
+.amt{margin:20px 0 6px;font-size:52px;font-weight:900;letter-spacing:-.04em;line-height:1;background:linear-gradient(90deg,#fff,var(--g) 55%,#c6ffdd);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:shine 4s linear infinite}
+.amt span{font-size:30px}
+@keyframes shine{to{background-position:-200% 0}}
+.fee{color:var(--m);font-size:13px}
+.meth{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 14px;border-radius:12px;background:rgba(57,255,131,.1);border:1px solid var(--ln);font-weight:800;font-size:14px}
+.sbp{width:22px;height:22px;border-radius:6px;background:conic-gradient(#5b57a2 0 25%,#d90751 0 50%,#fab718 0 75%,#0fa8e0 0);}
+.btn{position:relative;width:100%;min-height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;cursor:pointer;font:800 18px/1 inherit;color:var(--t);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);margin-top:10px;overflow:hidden;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.go{color:#021b0c;background:linear-gradient(135deg,#6bffa6,#22e874 45%,#0fc25d);border:0;box-shadow:0 14px 40px -6px #22e87499,inset 0 1px 0 #ffffff88;animation:pulse 2s ease-in-out infinite}
+.btn.go:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);transform:translateX(-120%);animation:gloss 3s ease-in-out infinite}
+@keyframes gloss{55%,100%{transform:translateX(120%)}}
+@keyframes pulse{50%{box-shadow:0 14px 56px 0 #39ff83aa,inset 0 1px 0 #ffffff88}}
+.wait{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px 0 4px;color:#cfeedd;font-size:14px;font-weight:600}
+.dots{display:flex;gap:5px}.dots i{width:7px;height:7px;border-radius:50%;background:var(--g);animation:dot 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,80%,100%{transform:scale(.4);opacity:.4}40%{transform:scale(1);opacity:1}}
+details.qr{margin-top:14px;border-radius:20px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);text-align:left}
+details.qr summary{list-style:none;cursor:pointer;padding:15px 16px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px}
+details.qr summary::-webkit-details-marker{display:none}
+details.qr summary:after{content:"›";margin-left:auto;font-size:22px;transition:transform .25s;color:var(--g)}
+details.qr[open] summary:after{transform:rotate(90deg)}
+.qrbox{padding:0 16px 18px;text-align:center}
+.qrframe{position:relative;display:inline-block;padding:14px;border-radius:22px;background:#fff;box-shadow:0 0 0 6px rgba(57,255,131,.18),0 0 50px #39ff8355}
+.qrframe img{display:block;width:220px;height:220px;image-rendering:pixelated}
+.qrframe:after{content:"";position:absolute;left:10px;right:10px;height:3px;top:14px;border-radius:3px;background:linear-gradient(90deg,transparent,#39ff83,transparent);box-shadow:0 0 14px #39ff83;animation:scan 2.4s ease-in-out infinite}
+@keyframes scan{50%{top:calc(100% - 17px)}}
+.qrbox p{color:var(--m);font-size:13px;margin:14px 0 0}
+.note{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);font-size:13px;line-height:1.4;color:#bcd9c7;text-align:left}
+.note b{color:var(--t)}
+.done{position:relative;width:160px;height:160px;margin:0 auto 18px}
+.done .ring{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#39ff8355,transparent 65%);animation:br 2.4s infinite}
+@keyframes br{50%{transform:scale(1.08)}}
+.done svg{position:absolute;inset:0;width:160px;height:160px}
+.done circle{fill:none;stroke:var(--g);stroke-width:5;stroke-dasharray:440;stroke-dashoffset:440;animation:draw .9s .1s cubic-bezier(.6,0,.2,1) forwards;filter:drop-shadow(0 0 10px #39ff83);transform-origin:center;transform:rotate(-90deg)}
+.done path{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;stroke-dashoffset:120;animation:draw .5s .85s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+h1{font-size:30px;line-height:1.1;letter-spacing:-.035em;margin:0 0 10px;font-weight:900}
+h1 em{font-style:normal;color:var(--g);text-shadow:0 0 18px #39ff8388}
+.sub{font-size:15.5px;line-height:1.45;color:var(--m);margin:0 auto 18px;max-width:330px}
+.raven{width:170px;margin:0 auto 6px;display:block;filter:drop-shadow(0 0 30px #3a7bff66);animation:fly 3s ease-in-out infinite}
+@keyframes fly{50%{transform:translateY(-10px) rotate(-2deg)}}
+#confetti{position:fixed;inset:0;z-index:5;pointer-events:none}
+.foot{text-align:center;color:#7fa38c;font-size:12.5px;margin-top:8px}.foot a{color:var(--g);text-decoration:none;font-weight:700}
+@media(min-width:760px){details.qr{display:block}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="sky"><div class="blob b1"></div><div class="blob b2"></div><div class="mt"></div><div class="vig"></div></div>
+<canvas id="confetti"></canvas>
+<main class="wrap">
+ <div class="top"><div class="brand"><img src="/static/v/logo.webp" alt=""><span>VAYNAH <b>VPN</b></span></div>
+  <div class="secure"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Защищённая оплата</div></div>
+ <div class="content">
+  <!-- ожидание оплаты -->
+  <section class="view on" id="vPay">
+   <div class="card">
+    <div class="plan"><img src="/static/v/logo.webp" alt=""><div><small>Подписка</small><b>__PLAN__</b></div></div>
+    <div class="amt" id="amt">__AMOUNT__<span> ₽</span></div>
+    <div class="fee">__FEE__</div>
+    <div class="meth"><span class="sbp"></span>Система быстрых платежей</div>
+   </div>
+   <a class="btn go" id="payBtn" href="__URL__">__BTN__ <span>→</span></a>
+   <div class="wait"><span class="dots"><i></i><i></i><i></i></span>Ждём оплату — страница обновится сама</div>
+   <details class="qr" id="qr"><summary>📱 Оплатить с телефона по QR-коду</summary>
+    <div class="qrbox"><div class="qrframe"><img src="__QR__" alt="QR"></div><p>__QRHINT__</p></div></details>
+   <div class="note">🔒 <div>Подписка включится <b>автоматически</b> сразу после оплаты — ничего нажимать не нужно.</div></div>
+  </section>
+  <!-- оплачено -->
+  <section class="view" id="vOk">
+   <div class="done"><div class="ring"></div><svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="70"/><path d="M50 82l20 20 42-44"/></svg></div>
+   <h1>Оплата <em>прошла!</em></h1>
+   <p class="sub" id="okText">Подписка активна. Ключ и инструкция уже в боте.</p>
+   <a class="btn go" href="https://t.me/__BOT__">Вернуться в бот <span>→</span></a>
+  </section>
+  <!-- истёк -->
+  <section class="view" id="vBad">
+   <img class="raven" src="/static/v/raven.webp" alt="">
+   <h1>Счёт <em style="color:var(--o);text-shadow:none">истёк</em></h1>
+   <p class="sub">Ничего не списано. Вернись в бот и создай новый счёт — это займёт пару секунд.</p>
+   <a class="btn go" href="https://t.me/__BOT__">Вернуться в бот <span>→</span></a>
+  </section>
+ </div>
+ <div class="foot">Вопросы по оплате? <a href="https://t.me/__BOT__">@__BOT__</a></div>
+</main>
+<script>
+(function(){
+const TX="__TX__",$=id=>document.getElementById(id);
+if(!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent))$('qr').open=true;
+function view(v){['vPay','vOk','vBad'].forEach(x=>$(x).classList.toggle('on',x===v));if(v==='vOk')boom()}
+let stop=false,n=0;
+async function poll(){if(stop)return;n++;
+ try{const r=await fetch('/pay/'+TX+'/status',{cache:'no-store'});const d=await r.json();
+  if(d.status==='CONFIRMED'){stop=true;if(d.until)$('okText').innerHTML='Подписка активна до <b>'+d.until+'</b>. Ключ и инструкция уже в боте.';view('vOk');return}
+  if(d.status==='CANCELED'||d.status==='EXPIRED'){stop=true;view('vBad');return}
+ }catch(e){}
+ setTimeout(poll,n<40?4000:10000)}
+setTimeout(poll,2500);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!stop){n=0}});
+function boom(){const k=$('confetti'),g=k.getContext('2d');k.width=innerWidth;k.height=innerHeight;const cs=['#39ff83','#eafff2','#0fd968','#ffd44d','#7cf'];
+ let ps=Array.from({length:160},()=>({x:innerWidth/2,y:innerHeight*.3,vx:(Math.random()-.5)*15,vy:Math.random()*-14-3,s:Math.random()*7+3,c:cs[Math.random()*5|0],r:Math.random()*6,vr:(Math.random()-.5)*.3,l:1}));
+ (function f(){g.clearRect(0,0,k.width,k.height);ps=ps.filter(p=>p.l>0);for(const p of ps){p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.l-=.008;g.save();g.globalAlpha=Math.max(0,p.l);g.translate(p.x,p.y);g.rotate(p.r);g.fillStyle=p.c;g.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);g.restore()}if(ps.length)requestAnimationFrame(f);else g.clearRect(0,0,k.width,k.height)})()}
+})();
+</script>
+</body></html>

@@ -1,0 +1,1 @@
+{"state": "ok", "votes": {"DE": {"down": false, "web": 2, "bot": true, "since": null}, "ES": {"down": false, "web": 2, "bot": true, "since": null}, "FI": {"down": false, "web": 2, "bot": true, "since": null}}, "ts": 1795643128, "since": 1795590670, "mode": "failover"}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Башни Кавказа — игра</title>
+<meta name="description" content="Башни Кавказа — бесплатная браузерная игра. Беги по горным тропам Ингушетии, перепрыгивай камни и собирай звёзды.">
+<meta name="theme-color" content="#0f1c2e">
+<style>
+:root{--bg:#0f1c2e;--gold:#e8b04a;--snow:#f4f1ea;--stone:#8a7f72}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--snow);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden;touch-action:manipulation}
+canvas{display:block;width:100vw;height:100vh}
+#ui{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;pointer-events:none}
+#ui.hide{display:none}
+h1{font-size:clamp(28px,7vw,56px);letter-spacing:.04em;color:var(--gold);text-shadow:0 3px 0 #6b4a12}
+p{max-width:520px;margin-top:12px;line-height:1.5;opacity:.9}
+.btn{pointer-events:auto;margin-top:22px;background:var(--gold);color:#1b1206;border:0;border-radius:14px;padding:14px 34px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #8a5d17}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8a5d17}
+#hud{position:fixed;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;font-weight:700;font-size:18px;pointer-events:none;text-shadow:0 2px 4px #000}
+footer{position:fixed;bottom:8px;width:100%;text-align:center;font-size:12px;opacity:.5;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><span id="sc">0</span><span id="best">Рекорд: 0</span></div>
+<div id="ui">
+  <h1>Башни Кавказа</h1>
+  <p>Беги по горным тропам мимо древних ингушских башен. Прыгай через камни — нажми экран, пробел или ↑. Собирай золотые звёзды.</p>
+  <button class="btn" id="go">Играть</button>
+</div>
+<footer>© Башни Кавказа · браузерная игра</footer>
+<script>
+(()=>{
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H,G,dpr;
+function rs(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);G=H*0.78}
+addEventListener('resize',rs);rs();
+const ui=document.getElementById('ui'),sc=document.getElementById('sc'),bs=document.getElementById('best'),go=document.getElementById('go');
+let best=0;try{best=+localStorage.getItem('bk_best')||0}catch(e){}
+bs.textContent='Рекорд: '+best;
+let run=false,t=0,spd,score,p,obs,stars,parts;
+function reset(){spd=6;score=0;t=0;p={x:W*0.18,y:G,vy:0,on:true};obs=[];stars=[];parts=[]}
+reset();
+function jump(){if(!run)return start();if(p.on){p.vy=-H*0.024;p.on=false}}
+function start(){reset();run=true;ui.classList.add('hide')}
+go.onclick=e=>{e.stopPropagation();start()};
+addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();jump()}});
+addEventListener('pointerdown',e=>{if(e.target!==go)jump()});
+// mountains layers
+function ridge(seed,amp,base,col,off){x.fillStyle=col;x.beginPath();x.moveTo(0,H);for(let i=0;i<=W+40;i+=20){const k=(i+off)*0.004*seed;const y=base-Math.abs(Math.sin(k)*amp+Math.sin(k*2.3)*amp*0.4);x.lineTo(i,y)}x.lineTo(W,H);x.fill()}
+function snow(seed,amp,base,off){x.fillStyle='rgba(244,241,234,.85)';for(let i=0;i<=W+40;i+=20){const k=(i+off)*0.004*seed;const y=base-Math.abs(Math.sin(k)*amp+Math.sin(k*2.3)*amp*0.4);if(base-y>amp*0.95){x.fillRect(i-6,y,12,6)}}}
+function tower(bx,by,h,col){const w=h*0.28;x.fillStyle=col;x.beginPath();x.moveTo(bx-w/2,by);x.lineTo(bx-w*0.38,by-h);x.lineTo(bx,by-h*1.18);x.lineTo(bx+w*0.38,by-h);x.lineTo(bx+w/2,by);x.fill();x.fillStyle='rgba(0,0,0,.35)';for(let i=1;i<4;i++)x.fillRect(bx-2,by-h*i/4.2,4,7)}
+function sky(){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0f1c2e');g.addColorStop(.55,'#27406b');g.addColorStop(1,'#e39b52');x.fillStyle=g;x.fillRect(0,0,W,H);x.fillStyle='#f6d77a';x.beginPath();x.arc(W*0.8,H*0.22,Math.min(W,H)*0.06,0,7);x.fill()}
+function draw(){
+ sky();
+ const o=t*spd;
+ ridge(1.0,H*0.22,H*0.62,'#3b4f73',o*0.15);snow(1.0,H*0.22,H*0.62,o*0.15);
+ for(let i=0;i<4;i++){const tx=((i*W*0.45-o*0.3)%(W*1.8)+W*1.8)%(W*1.8)-W*0.2;tower(tx,H*0.70,H*0.17,'#2b3a55')}
+ ridge(1.7,H*0.12,H*0.74,'#4f5f45',o*0.4);
+ x.fillStyle='#6b5b45';x.fillRect(0,G,W,H-G);x.fillStyle='#8a7f72';for(let i=0;i<W;i+=40)x.fillRect((i-o)%W<0?(i-o)%W+W:(i-o)%W,G+8,18,4);
+ // stars
+ x.fillStyle='#e8b04a';stars.forEach(s=>{x.save();x.translate(s.x,s.y);x.rotate(t*0.05);x.beginPath();for(let i=0;i<10;i++){const r=i%2?7:15;x.lineTo(Math.cos(i*Math.PI/5)*r,Math.sin(i*Math.PI/5)*r)}x.fill();x.restore()});
+ // rocks
+ obs.forEach(b=>{x.fillStyle='#5a5047';x.beginPath();x.moveTo(b.x,G);x.lineTo(b.x+b.w*0.2,G-b.h);x.lineTo(b.x+b.w*0.8,G-b.h*0.85);x.lineTo(b.x+b.w,G);x.fill()});
+ // runner (horseman silhouette)
+ const bob=p.on?Math.sin(t*0.5)*3:0;x.fillStyle='#1a1410';x.save();x.translate(p.x,p.y+bob);
+ x.fillRect(-18,-34,36,16);x.fillRect(-16,-18,6,18);x.fillRect(10,-18,6,18);x.fillRect(14,-46,10,16);x.fillRect(-4,-58,10,24);x.beginPath();x.arc(1,-64,7,0,7);x.fill();
+ x.fillStyle='#e8b04a';x.fillRect(-6,-74,14,5);x.restore();
+ parts.forEach(q=>{x.fillStyle=`rgba(232,176,74,${q.a})`;x.fillRect(q.x,q.y,4,4)});
+}
+function step(){
+ if(run){
+  t++;spd+=0.0025;score+=spd*0.02;
+  p.vy+=H*0.0012;p.y+=p.vy;if(p.y>=G){p.y=G;p.vy=0;p.on=true}
+  if(t%Math.max(38,Math.floor(95-spd*3))===0&&Math.random()<0.8)obs.push({x:W+20,w:30+Math.random()*30,h:22+Math.random()*30});
+  if(t%70===0)stars.push({x:W+20,y:G-60-Math.random()*H*0.18});
+  obs.forEach(b=>b.x-=spd);stars.forEach(s=>s.x-=spd);
+  obs=obs.filter(b=>b.x>-80);
+  stars=stars.filter(s=>{if(Math.abs(s.x-p.x)<26&&Math.abs(s.y-(p.y-40))<40){score+=25;for(let i=0;i<10;i++)parts.push({x:s.x,y:s.y,vx:(Math.random()-.5)*6,vy:(Math.random()-.5)*6,a:1});return false}return s.x>-30});
+  parts.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.a-=0.03});parts=parts.filter(q=>q.a>0);
+  for(const b of obs){if(p.x+14>b.x+6&&p.x-14<b.x+b.w-6&&p.y>G-b.h+6){over();break}}
+  sc.textContent=Math.floor(score);
+ }
+ draw();requestAnimationFrame(step);
+}
+function over(){run=false;const s=Math.floor(score);if(s>best){best=s;try{localStorage.setItem('bk_best',s)}catch(e){}}bs.textContent='Рекорд: '+best;
+ ui.querySelector('h1').textContent='Привал';ui.querySelector('p').textContent='Ты набрал '+s+' очков. Горы ждут — попробуй ещё раз!';go.textContent='Ещё раз';ui.classList.remove('hide')}
+step();
+})();
+</script>
+</body>
+</html>

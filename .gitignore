@@ -1,0 +1,23 @@
+# окружение и кэш
+venv/
+__pycache__/
+*.pyc
+# данные и состояние (не код)
+*.sqlite3*
+*.db
+*.db-*
+backups/
+keywatch.json
+*.cmd
+push/
+*.log
+# файлы-бэкапы правок
+*.bak*
+*.before-*
+*.pre-*
+*.audit-backup-*
+# секреты
+*.env
+.env*
+*.key
+*.pem

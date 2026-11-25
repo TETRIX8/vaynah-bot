@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#081426">
+<title>VAYNAH VPN · Админ-панель</title>
+<style>
+:root{--bg:#081426;--bg2:#0a1020;--card:#102B50;--card2:#111a33;--tx:#eef2ff;--tx2:#c9d3f2;--mut:#8b99c2;--mut2:#5f6d96;
+--line:rgba(232,176,74,.13);--line2:rgba(232,176,74,.24);--a1:#1685FF;--a2:#53D8FF;--a3:#0B5FC0;--ok:#34d399;--okb:rgba(52,211,153,.12);
+--bad:#fb7185;--badb:rgba(251,113,133,.12);--wt:#fcd34d;--wb:rgba(251,191,36,.12);--grad:linear-gradient(135deg,#1685FF,#53D8FF);
+--r:18px;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif}
+body{min-height:100vh;background:radial-gradient(1200px 600px at 10% -10%,rgba(232,176,74,.16),transparent 60%),radial-gradient(900px 500px at 110% 0,rgba(185,114,42,.12),transparent 60%),var(--bg);}
+a{color:var(--a2);text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{display:flex;min-height:100vh}
+.side{width:236px;flex:none;position:sticky;top:0;height:100vh;padding:20px 14px;border-right:1px solid var(--line);background:rgba(8,12,24,.7);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:4px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px;font-size:18px;padding:4px 10px 18px}
+.logo i{width:30px;height:30px;border-radius:10px;background:var(--grad);display:grid;place-items:center;font-style:normal;font-size:16px;box-shadow:0 6px 20px rgba(232,176,74,.35)}
+.logo small{display:block;font-size:11px;color:var(--mut);font-weight:500;letter-spacing:0}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;color:var(--tx2);font-weight:550}
+.nav a:hover{background:rgba(232,176,74,.07)}
+.nav a.on{background:linear-gradient(135deg,rgba(232,176,74,.22),rgba(244,213,141,.12));color:#fff;box-shadow:inset 0 0 0 1px var(--line2)}
+.nav .ic{width:20px;text-align:center}
+.side .foot{margin-top:auto;font-size:12px;color:var(--mut);padding:10px}
+main{flex:1;min-width:0;padding:22px 26px 40px;max-width:1280px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.top h1{font-size:24px;margin:0;font-weight:800;letter-spacing:-.3px;flex:1;min-width:150px}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 11px;border-radius:9px;color:var(--mut);cursor:pointer;font-weight:600;font-size:13px}
+.seg button.on{background:var(--card2);color:#fff;box-shadow:inset 0 0 0 1px var(--line2)}
+.grid{display:grid;gap:14px}
+.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.k3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.k2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:linear-gradient(180deg,rgba(17,26,51,.9),rgba(13,20,40,.9));border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0}
+.card h3{margin:0 0 12px;font-size:14px;color:var(--tx2);font-weight:700;display:flex;align-items:center;gap:8px}
+.card h3 .sp{flex:1}
+.kpi .l{font-size:12.5px;color:var(--mut);font-weight:600}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:4px;white-space:nowrap}
+.kpi .s{font-size:12px;color:var(--mut);margin-top:2px}
+.kpi.hl{background:linear-gradient(135deg,rgba(232,176,74,.25),rgba(244,213,141,.10));border-color:var(--line2)}
+.up{color:var(--ok)}.dn{color:var(--bad)}
+.mt{margin-top:14px}
+.chart{width:100%;height:170px;display:block}
+.chart .b{fill:url(#g1)}.chart .b2{fill:url(#g2)}
+.chart text{fill:var(--mut2);font-size:10px}
+.tip{font-size:12px;color:var(--mut);min-height:18px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--mut);font-weight:600;text-align:left;font-size:12px;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.cl{cursor:pointer}tr.cl:hover td{background:rgba(232,176,74,.05)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -6px}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:700;background:rgba(232,176,74,.12);color:var(--tx2);white-space:nowrap}
+.pill.ok{background:var(--okb);color:var(--ok)}.pill.bad{background:var(--badb);color:var(--bad)}.pill.w{background:var(--wb);color:var(--wt)}.pill.v{background:rgba(185,114,42,.16);color:#53D8FF}
+.mut{color:var(--mut)}.sm{font-size:12.5px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:10px 15px;font-weight:700;cursor:pointer;background:var(--card2);color:var(--tx);box-shadow:inset 0 0 0 1px var(--line2);white-space:nowrap}
+.btn:hover{filter:brightness(1.15)}
+.btn.p{background:var(--grad);color:#04101f;box-shadow:0 6px 20px rgba(244,213,141,.25)}
+.btn.d{background:var(--badb);color:var(--bad);box-shadow:inset 0 0 0 1px rgba(251,113,133,.3)}
+.btn.s{padding:7px 11px;font-size:13px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{width:100%;background:#070c19;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--a1);box-shadow:0 0 0 3px rgba(232,176,74,.18)}
+textarea{min-height:150px;resize:vertical;font-family:inherit}
+label.f{display:block;font-size:12.5px;color:var(--mut);font-weight:600;margin:12px 0 6px}
+.sw{position:relative;width:46px;height:27px;flex:none}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;border-radius:99px;background:#1b2544;transition:.2s;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line2)}
+.sw span:after{content:"";position:absolute;width:21px;height:21px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+span{background:var(--a1)}.sw input:checked+span:after{transform:translateX(19px)}
+.set{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.set:last-child{border-bottom:0}
+.set .t{flex:1;min-width:0}
+.set .c{width:280px;max-width:52%}
+.fun{display:flex;flex-direction:column;gap:8px}
+.fs{position:relative;border-radius:12px;background:#0a1124;overflow:hidden;border:1px solid var(--line)}
+.fs .bar{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,rgba(232,176,74,.45),rgba(244,213,141,.25))}
+.fs .in{position:relative;display:flex;gap:10px;padding:11px 14px;align-items:center}
+.fs .in b{font-size:17px;min-width:56px}
+.fs .in .t{flex:1}
+.fs .in .p{font-weight:700;color:var(--tx2);font-size:13px}
+.empty{padding:28px;text-align:center;color:var(--mut)}
+.toast{position:fixed;left:50%;bottom:calc(84px + var(--sb));transform:translateX(-50%) translateY(20px);background:#111a33;border:1px solid var(--line2);padding:11px 16px;border-radius:14px;opacity:0;transition:.25s;z-index:99;max-width:92vw;box-shadow:0 10px 40px rgba(0,0,0,.5);pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.toast.err{border-color:rgba(251,113,133,.5);color:#fecdd3}
+.ld{display:inline-block;width:18px;height:18px;border:2px solid var(--line2);border-top-color:var(--a2);border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.bnav{display:none}
+.prog{height:8px;border-radius:9px;background:#0a1124;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.prog i{display:block;height:100%;background:var(--grad)}
+.uhead{display:flex;gap:14px;align-items:center}
+.av{width:52px;height:52px;border-radius:16px;background:var(--grad);display:grid;place-items:center;font-weight:800;font-size:20px;color:#04101f;flex:none}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:7px 12px;font-size:14px}
+.kv div:nth-child(odd){color:var(--mut)}
+.preview{background:#17212b;border-radius:14px;padding:10px 12px;max-width:420px;white-space:pre-wrap;word-break:break-word;font-size:14px;border:1px solid #233;}
+.preview img{max-width:100%;border-radius:10px;display:block;margin:-2px -4px 8px;width:calc(100% + 8px)}
+.preview .pb{margin-top:8px;text-align:center;background:#2b5278;border-radius:8px;padding:7px;font-weight:600;font-size:13px}
+.login{max-width:420px;margin:12vh auto;padding:20px;text-align:center}
+.login .logo{justify-content:center;font-size:24px}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:60;display:none;align-items:flex-end}
+.sheet.on{display:flex}
+.sheet .box{background:#0c1327;border-top:1px solid var(--line2);border-radius:22px 22px 0 0;width:100%;padding:12px 12px calc(16px + var(--sb))}
+.sheet .box a{display:flex;gap:12px;padding:14px;border-radius:12px;color:var(--tx);font-weight:600}
+.sheet .box a:active{background:var(--card2)}
+.handle{width:40px;height:5px;border-radius:9px;background:var(--line2);margin:2px auto 10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line2);background:transparent;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer}
+.chip.on{background:var(--a1);border-color:var(--a1);color:#fff}
+.note{font-size:12.5px;color:var(--mut);background:rgba(232,176,74,.07);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.warn{background:var(--wb);border-color:rgba(251,191,36,.3);color:#fde68a}
+@media (max-width:1100px){.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+ .side{display:none}
+ main{padding:14px 12px calc(96px + var(--sb))}
+ .top h1{font-size:21px}
+ .k3,.k2{grid-template-columns:1fr}
+ .kpi .v{font-size:22px}
+ .card{padding:14px}
+ .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(8,12,24,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px calc(6px + var(--sb))}
+ .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:var(--mut);padding:5px 0;font-weight:600}
+ .bnav a .ic{font-size:20px;line-height:1.1}
+ .bnav a.on{color:#fff}
+ .set{flex-wrap:wrap}.set .c{width:100%;max-width:100%}
+ .kv{grid-template-columns:120px 1fr}
+ .hm{display:none}
+}
+</style>
+<style>/* 16.11.2026 IngVertu: горы и орнамент */
+body::before{content:"";position:fixed;left:0;right:0;top:0;height:5px;z-index:50;pointer-events:none;background:repeating-linear-gradient(135deg,#1685FF 0 6px,transparent 6px 12px),#0B5FC0;opacity:.85}
+body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:22vh;max-height:200px;z-index:-1;pointer-events:none;opacity:.55;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260' preserveAspectRatio='none'%3E%3Cpath d='M0 260 L0 170 L120 90 L210 150 L330 40 L430 130 L520 80 L640 160 L760 60 L880 140 L980 70 L1090 150 L1200 100 L1200 260Z' fill='%23162238'/%3E%3Cpath d='M0 260 L0 210 L160 160 L300 200 L470 150 L620 205 L800 165 L960 210 L1100 175 L1200 200 L1200 260Z' fill='%230f1a2c'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+.kpi.hl{box-shadow:inset 0 0 0 1px rgba(232,176,74,.45),0 18px 40px -24px rgba(232,176,74,.6)}
+</style><style id="v4">
+/* 16.11.2026 v4: верхнее меню, иконки, анимации */
+body::after{opacity:.35}
+.app{display:block}
+.side{display:none!important}
+.bnav,.sheet{display:none!important}
+.tb{position:sticky;top:0;z-index:40;background:rgba(6,10,20,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.tb .in{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:12px 22px 0}
+.tb .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:.2px;white-space:nowrap}
+.tb .brand i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--grad);box-shadow:0 8px 24px -6px rgba(232,176,74,.6)}
+.tb .brand i svg{width:18px;height:18px;fill:#1b1206}
+.tb .brand small{display:block;font-size:11px;color:var(--mut);font-weight:600}
+.tb .sp{flex:1}
+.tb .me{font-size:12.5px;color:var(--mut);white-space:nowrap}
+.tb .out{display:inline-flex;align-items:center;gap:6px;color:var(--tx2);font-size:13px;font-weight:600;padding:7px 11px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line2);transition:background .2s}
+.tb .out:hover{background:rgba(232,176,74,.1)}
+.tnav{max-width:1320px;margin:0 auto;display:flex;gap:2px;padding:8px 16px 0;overflow-x:auto;scrollbar-width:none;position:relative}
+.tnav::-webkit-scrollbar{display:none}
+.tnav a{position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 13px 13px;color:var(--mut);font-weight:650;font-size:13.5px;white-space:nowrap;border-radius:10px 10px 0 0;transition:color .2s,background .2s}
+.tnav a:hover{color:var(--tx);background:rgba(232,176,74,.06)}
+.tnav a.on{color:#fff}
+.tnav a::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:2px;background:var(--grad);transform:scaleX(0);transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
+.tnav a.on::after{transform:scaleX(1)}
+.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tnav a.on .ic{stroke:var(--a2)}
+main{max-width:1320px;margin:0 auto;padding:26px 22px 60px}
+.top h1{font-size:26px;letter-spacing:-.5px}
+.card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;background:linear-gradient(180deg,rgba(18,26,48,.82),rgba(11,17,33,.86));backdrop-filter:blur(6px)}
+.card:hover{border-color:var(--line2);box-shadow:0 18px 50px -30px rgba(232,176,74,.45)}
+.kpi:hover{transform:translateY(-3px)}
+.kpi .v{font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#fff,#53D8FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{transition:transform .15s,filter .2s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn.p:hover{box-shadow:0 10px 30px -6px rgba(244,213,141,.45)}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.anim>*{animation:fu .55s cubic-bezier(.2,.8,.2,1) both}
+.anim>*:nth-child(2){animation-delay:.05s}.anim>*:nth-child(3){animation-delay:.1s}.anim>*:nth-child(4){animation-delay:.15s}
+.anim>*:nth-child(5){animation-delay:.2s}.anim>*:nth-child(6){animation-delay:.25s}.anim>*:nth-child(n+7){animation-delay:.3s}
+.anim .grid>*{animation:fu .6s cubic-bezier(.2,.8,.2,1) both}
+.anim .grid>*:nth-child(2){animation-delay:.07s}.anim .grid>*:nth-child(3){animation-delay:.14s}.anim .grid>*:nth-child(4){animation-delay:.21s}
+@keyframes gr{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.chart rect{transform-box:fill-box;transform-origin:bottom;animation:gr .8s cubic-bezier(.2,.8,.2,1) both}
+.chart rect:hover{filter:brightness(1.35)}
+.empty .ld{width:26px;height:26px}
+.sk{height:110px;border-radius:var(--r);background:linear-gradient(90deg,rgba(255,255,255,.03),rgba(232,176,74,.08),rgba(255,255,255,.03));background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.bar2{height:8px;border-radius:9px;background:#0a1124;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.bar2 i{display:block;height:100%;background:var(--grad);transform-origin:left;animation:gx 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes gx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:6px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+@media (prefers-reduced-motion:reduce){.anim>*,.anim .grid>*,.chart rect,.bar2 i{animation:none}}
+@media (max-width:860px){.tb .in{padding:10px 14px 0}.tb .me{display:none}.tnav{padding:6px 8px 0}main{padding:18px 12px 40px}}
+</style><style id="v5">
+/* ===== 25.11.2026 · VAYNAH neon green ===== */
+:root{--bg:#020a06;--card:#06180e;--card2:#0a2416;--tx:#f2fff7;--tx2:#cfe8d9;--mut:#8fb39d;--mut2:#5f8a70;--line:rgba(57,255,131,.12);--line2:rgba(57,255,131,.24);--a1:#22e874;--a2:#39ff83;--a3:#0fae55;--grad:linear-gradient(135deg,#8dffbc,#39ff83 45%,#13d36a)}
+body{background:radial-gradient(1100px 600px at 0% -10%,rgba(57,255,131,.14),transparent 60%),radial-gradient(900px 500px at 110% 0,rgba(15,174,85,.12),transparent 60%),var(--bg)!important}
+body::before{background:linear-gradient(90deg,transparent,#39ff83 30%,#b6ffd3 50%,#39ff83 70%,transparent)!important;height:2px!important;opacity:.85!important;box-shadow:0 0 14px #39ff83}
+body::after{background:url(/static/v/mountains.webp) center bottom/cover no-repeat!important;height:42vh!important;max-height:440px!important;opacity:.16!important;filter:hue-rotate(40deg) saturate(1.2);-webkit-mask-image:linear-gradient(to top,#000 30%,transparent);mask-image:linear-gradient(to top,#000 30%,transparent)}
+a{color:#7dffb0}
+.tb{background:rgba(2,12,7,.78)!important;border-bottom-color:var(--line)!important}
+.blogo{width:38px;height:38px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(57,255,131,.5),0 0 18px rgba(57,255,131,.5);animation:lgb 3.2s ease-in-out infinite}
+@keyframes lgb{50%{box-shadow:0 0 0 1px rgba(57,255,131,.85),0 0 30px rgba(57,255,131,.85)}}
+.tb .brand{font-size:16.5px}.tb .brand b{color:#39ff83;text-shadow:0 0 12px rgba(57,255,131,.55)}
+.tnav a.on{text-shadow:0 0 14px rgba(57,255,131,.45)}.tnav a.on .ic{stroke:#39ff83}
+.card{background:linear-gradient(180deg,rgba(8,30,18,.84),rgba(3,14,8,.9))!important;border-color:var(--line)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.card:hover{border-color:var(--line2)!important;box-shadow:0 18px 50px -30px rgba(57,255,131,.45)!important}
+.kpi.hl{background:linear-gradient(135deg,rgba(57,255,131,.18),rgba(57,255,131,.04))!important;box-shadow:inset 0 0 0 1px rgba(57,255,131,.4),0 18px 40px -24px rgba(57,255,131,.6)!important}
+.kpi .v{background:linear-gradient(135deg,#fff,#39ff83)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.btn{background:rgba(57,255,131,.06)}
+.btn.p{background:var(--grad)!important;color:#032112!important;box-shadow:0 8px 24px -6px rgba(57,255,131,.55)!important}
+.btn.p:hover{box-shadow:0 12px 34px -6px rgba(57,255,131,.75)!important}
+.seg,.prog,.bar2,.fs{background:#031008!important}
+.seg button.on{background:#0d3220!important}
+.chart line{stroke:rgba(57,255,131,.08)}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:#020d07!important}
+input:focus,select:focus,textarea:focus{border-color:#39ff83!important;box-shadow:0 0 0 3px rgba(57,255,131,.18)!important}
+.sw span{background:#0b2216!important}.sw input:checked+span{background:#22e874!important;box-shadow:0 0 14px rgba(57,255,131,.5)}
+tr.cl:hover td{background:rgba(57,255,131,.05)!important}
+.pill{background:rgba(57,255,131,.08)}
+.pill.v{background:rgba(57,255,131,.14)!important;color:#8dffbc!important}
+.chip.on{background:#22e874!important;border-color:#22e874!important;color:#032112!important}
+.sk{background:linear-gradient(90deg,rgba(255,255,255,.03),rgba(57,255,131,.09),rgba(255,255,255,.03))!important;background-size:200% 100%!important}
+.fs .bar{background:linear-gradient(90deg,rgba(57,255,131,.42),rgba(182,255,211,.18))!important}
+.note{background:rgba(57,255,131,.05)!important}
+.toast{background:#06180e!important}
+/* ----- ключи ----- */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.key{position:relative;overflow:hidden}
+.key::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#39ff83;box-shadow:0 0 14px #39ff83}
+.key.bad::before{background:#fb7185;box-shadow:0 0 14px #fb7185}.key.w::before{background:#fcd34d;box-shadow:none}
+.key.bad{border-color:rgba(251,113,133,.35)!important}
+.kh{display:flex;gap:12px;align-items:center}
+.kh b{font-size:15px}
+.kdot{width:12px;height:12px;border-radius:50%;flex:none}
+.kdot.ok{background:#39ff83;animation:kp 2s infinite}
+.kdot.bad{background:#fb7185;box-shadow:0 0 12px #fb7185}
+.kdot.w{background:#fcd34d}
+@keyframes kp{0%{box-shadow:0 0 0 0 rgba(57,255,131,.7)}70%{box-shadow:0 0 0 9px rgba(57,255,131,0)}100%{box-shadow:0 0 0 0 rgba(57,255,131,0)}}
+.kstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 10px}
+.kstats>div{background:rgba(255,255,255,.03);border-radius:12px;padding:8px 10px;box-shadow:inset 0 0 0 1px var(--line)}
+.kstats b{display:block;font-size:17px;margin-top:2px;font-variant-numeric:tabular-nums}
+.spark{display:flex;gap:2px;align-items:flex-end;height:24px;margin-top:4px}
+.spark i{flex:1;max-width:8px;height:100%;border-radius:2px;background:linear-gradient(#39ff83,#13d36a);opacity:.85}
+.spark i.r{background:#fb7185;height:55%}
+.auto-hero{display:flex;gap:16px;align-items:center}
+.auto-hero .big{font-size:30px;font-weight:900;background:linear-gradient(135deg,#fff,#39ff83);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* ----- автоворонка ----- */
+.flow{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.fstep{padding:0!important;overflow:hidden;position:relative}
+.fstep .im{position:relative;aspect-ratio:16/9;overflow:hidden;background:#031008}
+.fstep img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.fstep:hover img{transform:scale(1.05)}
+.fstep .fb{padding:14px 16px 16px}
+.fstep .fw{color:#39ff83;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.fstep .fm{margin:6px 0 12px;color:var(--tx2);font-size:13.5px}
+.fnum{position:absolute;top:10px;left:10px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--grad);color:#032112;box-shadow:0 0 18px rgba(57,255,131,.65);z-index:1}
+.fcnt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.fcnt div{background:rgba(255,255,255,.03);border-radius:10px;padding:6px 8px;box-shadow:inset 0 0 0 1px var(--line);font-size:11.5px;color:var(--mut)}
+.fcnt b{display:block;font-size:16px;color:var(--tx)}
+.fcnt .c b{color:#39ff83}
+.state{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:800;font-size:13px}
+.state.on{background:rgba(57,255,131,.14);color:#8dffbc;box-shadow:inset 0 0 0 1px rgba(57,255,131,.4)}
+.state.off{background:rgba(251,113,133,.12);color:#fda4af;box-shadow:inset 0 0 0 1px rgba(251,113,133,.35)}
+@media (max-width:860px){.kstats b{font-size:15px}.fcnt b{font-size:14px}}
+
+/* ----- 🛠 Управление (25.11.2026) ----- */
+.ops-sum{display:flex;gap:8px;flex-wrap:wrap}
+.ops-sec{display:flex;align-items:center;gap:10px;margin:22px 0 10px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.ops-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.hlist{display:grid;gap:10px}
+.hrow{display:grid;grid-template-columns:54px minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:12px 14px!important;transition:transform .2s,border-color .2s,box-shadow .2s}
+.hrow.off{opacity:.62}
+.hrow.dirty{border-color:rgba(57,255,131,.55)!important;box-shadow:0 0 0 3px rgba(57,255,131,.1)!important}
+.hpos{position:relative;width:54px}
+.hpos input{width:54px!important;text-align:center;font-weight:900;font-size:17px;padding:9px 4px!important;border-radius:14px!important}
+.hpos small{position:absolute;left:0;right:0;top:-15px;text-align:center;font-size:9.5px;color:var(--mut2);letter-spacing:.08em;text-transform:uppercase}
+.hname input{font-weight:700;font-size:15px;background:transparent!important;border-color:transparent!important;padding:6px 8px!important;border-radius:10px!important}
+.hname input:hover{border-color:var(--line2)!important}
+.hname input:focus{background:#020d07!important}
+.hmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:2px 8px 0}
+.hmeta code{font-size:12px;color:#9fd8b6;background:rgba(57,255,131,.06);padding:3px 8px;border-radius:8px}
+.hh{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px}
+.hh.ok{background:rgba(57,255,131,.12);color:#8dffbc}.hh.bad{background:rgba(251,113,133,.12);color:#fda4af}.hh.na{background:rgba(255,255,255,.05);color:var(--mut)}
+.hh i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.hh.ok i{animation:kp 2s infinite}
+.hsave{opacity:0;pointer-events:none;transform:scale(.9);transition:.2s}
+.hrow.dirty .hsave{opacity:1;pointer-events:auto;transform:none}
+.htog{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.ru-ip{font-size:28px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#fff,#39ff83);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ports{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.port{border-radius:14px;padding:10px;text-align:center;background:rgba(255,255,255,.03);box-shadow:inset 0 0 0 1px var(--line)}
+.port b{display:block;font-size:18px;margin-top:2px;font-variant-numeric:tabular-nums}
+.port.ok{box-shadow:inset 0 0 0 1px rgba(57,255,131,.35);background:linear-gradient(180deg,rgba(57,255,131,.1),transparent)}
+.port.ok b{color:#8dffbc}.port.bad{box-shadow:inset 0 0 0 1px rgba(251,113,133,.35)}.port.bad b{color:#fda4af}
+.port small{font-size:11.5px;color:var(--mut)}
+.wiz{display:grid;gap:12px;margin-top:12px}
+.wz{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
+.wz>i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:13px;background:var(--grad);color:#032112;box-shadow:0 0 14px rgba(57,255,131,.45)}
+.wz b{display:block;font-size:14px;margin:4px 0 6px}
+.wz .mut{font-size:12.5px}
+.pubk{word-break:break-all;font:11.5px/1.45 ui-monospace,Menlo,Consolas,monospace;background:#020d07;border:1px solid var(--line2);border-radius:12px;padding:10px;color:#9fd8b6;max-height:86px;overflow:auto}
+.cbx{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--tx2);margin-top:6px}
+.cbx input{width:18px;height:18px;accent-color:#22e874}
+.ferr{color:#fda4af;font-size:13px;min-height:18px;margin-top:6px}
+.jobs{position:relative;display:grid;gap:10px}
+.job{position:relative;padding-left:26px}
+.job::before{content:"";position:absolute;left:8px;top:22px;bottom:-14px;width:2px;background:linear-gradient(var(--line2),transparent)}
+.job:last-child::before{display:none}
+.job .jd{position:absolute;left:2px;top:8px;width:14px;height:14px;border-radius:50%;background:#39ff83;box-shadow:0 0 10px #39ff83}
+.job.err .jd{background:#fb7185;box-shadow:0 0 10px #fb7185}.job.run .jd{background:#fcd34d;box-shadow:0 0 10px #fcd34d;animation:kp 1.4s infinite}
+.job summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:6px 0}
+.job summary::-webkit-details-marker{display:none}
+.job pre{white-space:pre-wrap;font-size:12px;max-height:300px;overflow:auto;background:#020d07;border:1px solid var(--line);border-radius:12px;padding:10px;margin:6px 0 0}
+@media (max-width:860px){.hrow{grid-template-columns:48px minmax(0,1fr) auto;}.hrow .hsavec{grid-column:1/-1}.hpos,.hpos input{width:48px!important}.ports{grid-template-columns:repeat(2,1fr)}}
+
+.grp-h{display:flex;align-items:center;gap:10px;margin:22px 0 10px;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.grp-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.grp-h .pill{text-transform:none;letter-spacing:0}
+.drill{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.drill button{text-align:left;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--tx);cursor:pointer;font:inherit;transition:.2s}
+.drill button:hover{border-color:#39ff83;background:rgba(57,255,131,.07)}
+.drill button b{display:block;font-size:14px}.drill button small{color:var(--mut);font-size:12px}
+.simbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;margin-bottom:14px;background:linear-gradient(90deg,rgba(252,211,77,.16),rgba(252,211,77,.04));box-shadow:inset 0 0 0 1px rgba(252,211,77,.4);color:#fde68a;font-weight:700}
+.simbar .sp{flex:1}
+.key.res{opacity:.8}.key.res.on{opacity:1}
+@media (max-width:860px){.drill{grid-template-columns:1fr 1fr}}
+
+.drgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.srv{position:relative;padding:14px 16px!important}
+.srv .t{display:flex;align-items:center;gap:8px;font-weight:800}
+.srv .ip{font:12px ui-monospace,Menlo,monospace;color:var(--mut)}
+.srv .big{font-size:22px;font-weight:900;margin:8px 0 2px}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.chk:last-child{border-bottom:0}
+.chk .i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:900;font-size:13px}
+.chk .i.ok{background:rgba(57,255,131,.16);color:#39ff83}.chk .i.bad{background:rgba(251,113,133,.16);color:#fb7185}.chk .i.w{background:rgba(252,211,77,.16);color:#fcd34d}
+.chk b{display:block}.chk span{font-size:12.5px;color:var(--mut)}
+.layer{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px!important}
+.layer .n{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:900;background:var(--grad);color:#032112;box-shadow:0 0 16px rgba(57,255,131,.4)}
+@media (max-width:1100px){.drgrid{grid-template-columns:1fr 1fr}}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#53D8FF"/><stop offset="1" stop-color="#1685FF" stop-opacity=".55"/></linearGradient>
+<linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9eef7"/><stop offset="1" stop-color="#0B5FC0" stop-opacity=".5"/></linearGradient>
+</defs></svg>
+<div id="root"></div>
+<div class="toast" id="toast"></div>
+<div class="sheet" id="sheet" onclick="if(event.target===this)this.classList.remove('on')"><div class="box"><div class="handle"></div><div id="sheetNav"></div></div></div>
+<script>
+const AUTH={%AUTH%}===1, BOT="{%BOT%}";
+const NAV=[["dash","📊","Обзор"],["funnel","🎯","Воронка"],["pays","💰","Платежи"],["users","👥","Пользователи"],["bc","📣","Рассылки"],
+["refs","🤝","Рефералы"],["promo","🎁","Промокоды"],["srv","🖥","Серверы"],["ops","🛠","Управление"],["settings","⚙️","Настройки"],["admins","👑","Админы"]];
+const BNAV=["dash","funnel","pays","users","more"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>(n==null||n==="")?"—":Number(n).toLocaleString("ru-RU",{maximumFractionDigits:1});
+const rub=n=>fmt(Math.round(n||0))+" ₽";
+const pct=(a,b)=>b?(Math.round(1000*a/b)/10)+"%":"—";
+const MSK=3*3600;
+function dt(ts,t=1){if(!ts)return"—";const d=new Date((ts+MSK)*1000);const p=x=>String(x).padStart(2,"0");return `${p(d.getUTCDate())}.${p(d.getUTCMonth()+1)}.${String(d.getUTCFullYear()).slice(2)}`+(t?` ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`:"")}
+function ago(ts){if(!ts)return"—";const s=Date.now()/1000-ts;if(s<0){const d=-s;return d<3600?`через ${Math.round(d/60)} мин`:d<86400?`через ${Math.round(d/3600)} ч`:`через ${Math.round(d/86400)} дн`}
+return s<60?"только что":s<3600?`${Math.round(s/60)} мин назад`:s<86400?`${Math.round(s/3600)} ч назад`:`${Math.round(s/86400)} дн назад`}
+function toast(m,err){const t=$("#toast");t.textContent=m;t.className="toast on"+(err?" err":"");clearTimeout(t._t);t._t=setTimeout(()=>t.className="toast",3200)}
+async function api(path,opt={}){
+ const o={credentials:"same-origin",headers:{"X-ZPA":"1"},...opt};
+ if(opt.json){o.method=o.method||"POST";o.headers["Content-Type"]="application/json";o.body=JSON.stringify(opt.json)}
+ const r=await fetch("api/"+path,o);
+ if(r.status===401){location.reload();throw new Error("auth")}
+ const d=await r.json().catch(()=>({error:"Некорректный ответ сервера"}));
+ if(!r.ok||d.error){throw new Error(d.error||("HTTP "+r.status))}
+ return d}
+const ST={days:30};
+function shell(){
+ $("#root").innerHTML=`<div class="app"><aside class="side"><div class="logo"><i>🏔</i><div>VAYNAH VPN<small>Админ-панель</small></div></div>
+ <nav class="nav">${NAV.map(([k,i,t])=>`<a href="#${k}" data-k="${k}"><span class="ic">${i}</span>${t}</a>`).join("")}</nav>
+ <div class="foot"><div id="meName"></div><a href="logout">Выйти</a></div></aside>
+ <main id="main"></main></div>
+ <nav class="bnav">${BNAV.map(k=>{if(k==="more")return `<a href="javascript:void(0)" onclick="$('#sheet').classList.add('on')" data-k="more"><span class="ic">•••</span>Ещё</a>`;const n=NAV.find(x=>x[0]===k);return `<a href="#${k}" data-k="${k}"><span class="ic">${n[1]}</span>${n[2]}</a>`}).join("")}</nav>`;
+ $("#sheetNav").innerHTML=NAV.filter(n=>!BNAV.includes(n[0])).map(([k,i,t])=>`<a href="#${k}" onclick="$('#sheet').classList.remove('on')"><span>${i}</span>${t}</a>`).join("")+`<a href="logout"><span>🚪</span>Выйти</a>`;
+ api("me").then(m=>{$("#meName").innerHTML=`Вы: <b>${esc(m.name)}</b>`}).catch(()=>{});
+}
+function setNav(k){document.querySelectorAll("[data-k]").forEach(a=>{const on=a.dataset.k===k||(a.dataset.k==="more"&&!BNAV.includes(k));a.classList.toggle("on",on)})}
+function head(title,extra=""){return `<div class="top"><h1>${title}</h1>${extra}</div>`}
+function daysSeg(cb,opts=[[1,"Сегодня"],[7,"7 дн"],[30,"30 дн"],[90,"90 дн"],[0,"Всё"]]){return `<div class="seg">${opts.map(([v,t])=>`<button class="${ST.days==v?"on":""}" onclick="ST.days=${v};${cb}()">${t}</button>`).join("")}</div>`}
+function loading(){$("#main").innerHTML=`<div class="empty"><span class="ld"></span></div>`}
+function chart(vals,labels,cls="b",unit=""){
+ const W=600,H=160,P=18,n=vals.length||1,mx=Math.max(1,...vals),bw=(W-8)/n;
+ let s=`<svg class="chart" viewBox="0 0 ${W} ${H+P}" preserveAspectRatio="none">`;
+ for(let g=1;g<=3;g++){const y=H-H*g/3;s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="rgba(232,176,74,.08)"/>`}
+ vals.forEach((v,i)=>{const h=Math.max(v?2:0,(H-6)*v/mx);s+=`<rect class="${cls}" x="${4+i*bw+bw*.14}" y="${H-h}" width="${bw*.72}" height="${h}" rx="${Math.min(4,bw*.3)}"><title>${labels[i]}: ${fmt(v)}${unit}</title></rect>`});
+ const step=Math.ceil(n/7);labels.forEach((l,i)=>{if(i%step===0||i===n-1&&n<=10)s+=`<text x="${4+i*bw+bw/2}" y="${H+13}" text-anchor="middle">${l}</text>`});
+ return s+`</svg>`}
+function bindChartTips(){document.querySelectorAll(".chart").forEach(svg=>{const tip=svg.nextElementSibling;svg.querySelectorAll("rect").forEach(r=>{const f=()=>{if(tip)tip.textContent=r.querySelector("title").textContent};r.addEventListener("mouseenter",f);r.addEventListener("click",f)})})}
+function kpi(l,v,s="",hl=""){return `<div class="card kpi ${hl}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`}
+
+/* ---------------- Обзор ---------------- */
+async function vDash(){
+ loading();const d=await api("dash?days="+(ST.days||365));const k=d.kpi,s=d.series,sys=await api("system").catch(()=>null);
+ const per=ST.days==1?"сегодня":ST.days?`за ${ST.days} дн`:"за всё время";
+ let h=head("Обзор",daysSeg("vDash",[[7,"7 дн"],[30,"30 дн"],[90,"90 дн"]]));
+ h+=`<div class="grid k4">${kpi("Выручка "+per,rub(k.rev_period),`сегодня ${rub(k.rev_today)} · всего ${rub(k.rev_all)}`,"hl")}
+ ${kpi("Активные подписки",fmt(k.active),`платных ${fmt(k.active_paid)} · старт ${fmt(k.active_intro)} · пробных ${fmt(k.active_trial)}`)}
+ ${kpi("Новые пользователи",fmt(k.new_period),`сегодня +${fmt(k.new_today)} · всего ${fmt(k.users)}`)}
+ ${kpi("Конверсия в оплату",(k.conv_period||0)+"%",`первых оплат ${per}: ${fmt(k.first_period)}`)}</div>
+ <div class="grid k4 mt">${kpi("MRR (оценка)",rub(k.mrr),"месячная выручка от активных")}
+ ${kpi("Оплат "+per,fmt(k.pays_period),`ср. чек ${rub(k.avg_check)} · ARPPU ${rub(k.arppu)}`)}
+ ${kpi("Канал",fmt(d.channel_members),`подписаны из бота: ${fmt(k.ch_sub)}`)}
+ ${kpi("Автопродление",fmt(k.autopay),`истекают за 3 дня: ${fmt(k.expiring3)}`)}</div>
+ <div class="grid k2 mt"><div class="card"><h3>💰 Выручка по дням</h3>${chart(s.rev,s.labels,"b"," ₽")}<div class="tip"></div></div>
+ <div class="card"><h3>👥 Новые пользователи</h3>${chart(s.new,s.labels,"b2")}<div class="tip"></div></div>
+ <div class="card"><h3>🧾 Первые оплаты</h3>${chart(s.first,s.labels,"b")}<div class="tip"></div></div>
+ <div class="card"><h3>📢 Подписки на канал из бота</h3>${chart(s.sub,s.labels,"b2")}<div class="tip"></div></div></div>
+ <div class="grid k2 mt"><div class="card"><h3>Последние платежи<span class="sp"></span><a href="#pays" class="sm">все →</a></h3><div class="tw"><table>
+ ${d.recent_pay.map(p=>`<tr class="cl" onclick="go('user/${p.tg_id}')"><td><b>${esc(p.name||p.tg_id)}</b><div class="mut sm">${esc(p.plan)} · ${esc(p.provider)}</div></td><td class="num"><b>${rub(p.amount)}</b><div class="mut sm">${ago(p.ts)}</div></td></tr>`).join("")||`<tr><td class="empty">Пока нет</td></tr>`}</table></div></div>
+ <div class="card"><h3>Новые пользователи<span class="sp"></span><a href="#users" class="sm">все →</a></h3><div class="tw"><table>
+ ${d.recent_users.map(u=>`<tr class="cl" onclick="go('user/${u.tg_id}')"><td><b>${esc(u.name||u.tg_id)}</b><div class="mut sm">${u.tg_id}${u.src?` · ${esc(u.src)}`:""}</div></td><td class="num">${u.ch?'<span class="pill ok">канал ✓</span>':'<span class="pill">без канала</span>'}<div class="mut sm">${ago(u.ts)}</div></td></tr>`).join("")}</table></div></div></div>`;
+ if(sys){h+=`<div class="card mt"><h3>🖥 Система</h3><div class="row">${Object.entries(sys.nodes||{}).map(([n,ok])=>`<span class="pill ${ok?"ok":"bad"}">${ok?"●":"○"} ${esc(n)}</span>`).join("")}
+ <span class="pill ${sys.channel.required?"ok":"w"}">Обязательный канал: ${sys.channel.required?"вкл":"выкл"}</span>
+ <span class="pill ${sys.intro.on?"ok":"w"}">«Старт» ${sys.intro.rub} ₽: ${sys.intro.on?"работает":(sys.intro.enabled?"нет оффера в Lava":"выключен")}</span>
+ ${sys.broadcasts_running?`<span class="pill v">Рассылок идёт: ${sys.broadcasts_running}</span>`:""}</div>
+ ${sys.intro.enabled&&!sys.intro.on?`<div class="note warn">«Старт · ${sys.intro.days} дня за 10 ₽» включится автоматически, как только в Lava появится разовый товар (например «VAYNAH VPN — 3 дня» за 10 ₽). До этого работает обычная витрина (пробный + тарифы).</div>`:""}</div>`}
+ $("#main").innerHTML=h;bindChartTips()}
+
+/* ---------------- Воронка ---------------- */
+async function vFunnel(){
+ loading();const d=await api("funnel?days="+ST.days);const N=d.stages[0].v||0,e=d.extra;
+ let h=head("Воронка и конверсия",daysSeg("vFunnel"));
+ h+=`<div class="card"><h3>🎯 Путь пользователя ${ST.days?`(пришли за ${ST.days==1?"сегодня":ST.days+" дн"})`:"(все)"}</h3><div class="fun">
+ ${d.stages.map((s,i)=>{const prev=i?d.stages[i-1].v:s.v;return `<div class="fs"><div class="bar" style="width:${N?Math.max(2,100*s.v/N):0}%"></div><div class="in"><b>${fmt(s.v)}</b><span class="t">${s.t}</span><span class="p">${i&&s.k!=="active"?pct(s.v,prev)+" от пред. · ":""}${pct(s.v,N)}</span></div></div>`}).join("")}
+ </div></div>
+ <div class="grid k4 mt">${kpi("Пробный → оплата",pct(e.trial_paid,e.trial),`${fmt(e.trial_paid)} из ${fmt(e.trial)}`)}
+ ${kpi("«Старт» → полная оплата",pct(e.intro_renew,e.intro),`${fmt(e.intro_renew)} из ${fmt(e.intro)} продлились`)}
+ ${kpi("Открыли «Старт» → оплатили",pct(e.intro,e.intro_view),`просмотров ${fmt(e.intro_view)} · переходов к оплате ${fmt(e.intro_click)}`)}
+ ${kpi("Время до 1-й оплаты",e.median_h==null?"—":(e.median_h<48?e.median_h+" ч":Math.round(e.median_h/24)+" дн"),"медиана")}</div>
+ <div class="grid k2 mt"><div class="card"><h3>📍 Источники</h3><div class="tw"><table><tr><th>Источник</th><th class="num">Пришли</th><th class="num">Канал</th><th class="num">Оплатили</th><th class="num">Выручка</th></tr>
+ ${d.sources.map(s=>`<tr><td>${esc(s.src)}</td><td class="num">${fmt(s.n)}</td><td class="num">${pct(s.ch,s.n)}</td><td class="num">${fmt(s.paid)} <span class="mut sm">${pct(s.paid,s.n)}</span></td><td class="num">${rub(s.rev)}</td></tr>`).join("")||`<tr><td colspan=5 class="empty">Нет данных</td></tr>`}</table></div>
+ <div class="note">Метка источника — ссылка вида <code>t.me/${BOT}?start=имя_метки</code> (например, для рекламы у блогера).</div></div>
+ <div class="card"><h3>📅 Когорты по неделям</h3><div class="tw"><table><tr><th>Неделя с</th><th class="num">Пришли</th><th class="num">Канал</th><th class="num">Оплатили</th><th class="num">Активны</th></tr>
+ ${d.cohorts.map(c=>`<tr><td>${c.week}</td><td class="num">${fmt(c.n)}</td><td class="num">${pct(c.ch,c.n)}</td><td class="num">${pct(c.paid,c.n)}</td><td class="num">${pct(c.active,c.n)}</td></tr>`).join("")}</table></div></div></div>`;
+ $("#main").innerHTML=h}
+
+/* ---------------- Платежи ---------------- */
+async function vPays(off=0){
+ loading();const q=ST.pq||"",pr=ST.pprov||"";
+ const d=await api(`payments?days=${ST.days}&provider=${encodeURIComponent(pr)}&q=${encodeURIComponent(q)}&offset=${off}`);
+ let h=head("Платежи и пополнения",daysSeg("vPays"));
+ h+=`<div class="grid k4">${kpi("Сумма",rub(d.total.sum),`${fmt(d.total.n)} платежей`,"hl")}${kpi("Плательщиков",fmt(d.total.payers),"уникальных")}
+ ${kpi("Первые оплаты",fmt((d.by_kind.first||{}).n||0)+" · "+rub((d.by_kind.first||{}).s||0),`«Старт»: ${fmt((d.by_kind.intro||{}).n||0)}`)}${kpi("Продления",fmt((d.by_kind.renew||{}).n||0),rub((d.by_kind.renew||{}).s||0))}</div>
+ <div class="grid k2 mt"><div class="card"><h3>По способу оплаты</h3><table>${d.by_provider.map(p=>`<tr><td>${esc(p.k)}</td><td class="num">${fmt(p.n)}</td><td class="num"><b>${rub(p.s)}</b></td></tr>`).join("")||`<tr><td class="empty">—</td></tr>`}</table></div>
+ <div class="card"><h3>По тарифам</h3><table>${d.by_plan.map(p=>`<tr><td>${esc(p.k)}</td><td class="num">${fmt(p.n)}</td><td class="num"><b>${rub(p.s)}</b></td></tr>`).join("")||`<tr><td class="empty">—</td></tr>`}</table></div></div>
+ <div class="card mt"><div class="row" style="margin-bottom:10px"><input type="text" id="pq" placeholder="Поиск: ID или @username" value="${esc(q)}" style="flex:1;min-width:180px">
+ <select id="pprov" style="width:auto;min-width:160px"><option value="">Все способы</option>${d.providers.map(p=>`<option ${p===pr?"selected":""}>${esc(p)}</option>`).join("")}</select>
+ <a class="btn s" href="api/export/payments">⬇️ CSV</a></div>
+ <div class="tw"><table><tr><th>Дата</th><th>Пользователь</th><th class="hm">Тариф</th><th>Способ</th><th class="num">Сумма</th></tr>
+ ${d.rows.map(p=>`<tr class="cl" onclick="go('user/${p.tg_id}')"><td class="sm">${dt(p.ts)}</td><td><b>${esc(p.name||p.tg_id)}</b><div class="mut sm">${p.tg_id}</div></td><td class="hm sm">${esc(p.plan)}${p.kind==="renew"?' <span class="pill v">продление</span>':p.kind==="intro"?' <span class="pill w">старт</span>':p.kind==="first"?' <span class="pill ok">первая</span>':""}</td><td class="sm">${esc(p.provider)}</td><td class="num"><b>${rub(p.amount)}</b>${p.stars?`<div class="mut sm">${p.stars} ⭐</div>`:""}</td></tr>`).join("")||`<tr><td colspan=5 class="empty">Платежей нет</td></tr>`}</table></div>
+ ${pager(off,d.rows.length,d.total.n,"vPays")}</div>`;
+ $("#main").innerHTML=h;
+ $("#pq").onkeydown=e=>{if(e.key==="Enter"){ST.pq=e.target.value;vPays()}};$("#pprov").onchange=e=>{ST.pprov=e.target.value;vPays()}}
+function pager(off,len,total,fn){if(total<=50)return"";return `<div class="row mt" style="justify-content:center">${off>0?`<button class="btn s" onclick="${fn}(${Math.max(0,off-50)})">← Назад</button>`:""}<span class="mut sm">${off+1}–${off+len} из ${fmt(total)}</span>${off+len<total?`<button class="btn s" onclick="${fn}(${off+50})">Дальше →</button>`:""}</div>`}
+
+/* ---------------- Пользователи ---------------- */
+const USEG=[["all","Все"],["active","Активные"],["paid","Платили"],["never_paid","Не платили"],["expiring","Истекают"],["expired","Истекли"],["trial_nopay","Пробный без оплаты"],["no_channel","Без канала"],["blocked","Заблокировали бота"]];
+async function vUsers(off=0){
+ loading();ST.useg=ST.useg||"all";ST.usort=ST.usort||"new";const q=ST.uq||"";
+ const d=await api(`users?seg=${ST.useg}&q=${encodeURIComponent(q)}&sort=${ST.usort}&offset=${off}`);
+ let h=head("Пользователи",`<a class="btn s" href="api/export/users">⬇️ CSV</a>`);
+ h+=`<div class="card"><div class="row"><input type="text" id="uq" placeholder="Поиск: Telegram ID, @username, имя или UUID" value="${esc(q)}" style="flex:1;min-width:200px">
+ <select id="usort" style="width:auto"><option value="new">Сначала новые</option><option value="seen">Были недавно</option><option value="paid">Больше заплатили</option><option value="pays">Больше оплат</option><option value="exp">Позже истекает</option></select></div>
+ <div class="chips mt">${USEG.map(([k,t])=>`<button class="chip ${ST.useg===k?"on":""}" onclick="ST.useg='${k}';vUsers()">${t}</button>`).join("")}</div>
+ <div class="mut sm mt">Найдено: <b>${fmt(d.total)}</b></div>
+ <div class="tw mt"><table><tr><th>Пользователь</th><th>Подписка</th><th class="num hm">Оплаты</th><th class="hm">Пришёл</th></tr>
+ ${d.rows.map(u=>{const act=u.exp&&u.exp>Date.now()/1000&&!u.revoked;return `<tr class="cl" onclick="go('user/${u.tg_id}')"><td><b>${esc(u.name||"—")}</b><div class="mut sm">${u.tg_id}${u.blocked?' · <span class="dn">заблокировал</span>':""}</div></td>
+ <td>${act?`<span class="pill ok">до ${dt(u.exp,0)}</span>`:u.exp?`<span class="pill bad">истекла ${dt(u.exp,0)}</span>`:'<span class="pill">нет</span>'}<div class="mut sm">${esc(u.plan)}${u.autopay?" · 🔁":""}${u.ch?" · 📢":""}</div></td>
+ <td class="num hm">${u.pays?`<b>${rub(u.total)}</b><div class="mut sm">${u.pays} опл.</div>`:'<span class="mut">—</span>'}</td><td class="hm sm">${dt(u.created,0)}<div class="mut">${ago(u.seen)}</div></td></tr>`}).join("")||`<tr><td colspan=4 class="empty">Никого</td></tr>`}</table></div>
+ ${pager(off,d.rows.length,d.total,"vUsers")}</div>`;
+ $("#main").innerHTML=h;$("#usort").value=ST.usort;
+ $("#uq").onkeydown=e=>{if(e.key==="Enter"){ST.uq=e.target.value;vUsers()}};$("#usort").onchange=e=>{ST.usort=e.target.value;vUsers()}}
+
+async function vUser(id){
+ loading();const d=await api("user/"+id);const u=d.user,ap=d.autopay;const now=Date.now()/1000,act=u.expires_at>now&&!u.revoked;
+ const ini=(u.first_name||u.username||"?").trim()[0]||"?";
+ let h=`<div class="top"><a href="#users" class="btn s">← Назад</a><h1 style="font-size:20px">Пользователь</h1></div>
+ <div class="card"><div class="uhead"><div class="av">${esc(ini.toUpperCase())}</div><div style="min-width:0"><div style="font-size:19px;font-weight:800">${esc(u.first_name||"—")} ${u.username?`<a href="https://t.me/${esc(u.username)}" target="_blank" class="sm">@${esc(u.username)}</a>`:""}</div>
+ <div class="mut sm">ID <b>${u.tg_id}</b>${u.is_admin?' · <span class="pill v">админ</span>':""}${u.blocked?' · <span class="pill bad">заблокировал бота</span>':""}</div></div></div>
+ <div class="grid k4 mt">${kpi("Подписка",act?"активна":u.expires_at?"истекла":"нет",u.expires_at?"до "+dt(u.expires_at):"","")}${kpi("Оплачено",rub(u.total_paid),`${u.pay_count||0} оплат`)}${kpi("Пригласил",fmt(d.invited.length),`засчитано ${d.invited.filter(x=>x.days>0).length}`)}${kpi("Канал",u.ch_sub?"подписан":"нет",u.ch_sub_at?dt(u.ch_sub_at):"")}</div>
+ <div class="kv mt"><div>Тариф</div><div>${esc(u.plan_title)}</div><div>Пришёл</div><div>${dt(u.created_at)} ${u.src?`· метка <b>${esc(u.src)}</b>`:""}</div>
+ <div>Пригласил его</div><div>${d.ref?`<a href="#user/${d.ref.tg_id}">${esc(d.ref.name||d.ref.tg_id)}</a>`:"—"}</div><div>Был в боте</div><div>${ago(u.last_seen)}</div>
+ <div>Пробный / старт</div><div>${u.trial_used?"пробный использован":"пробный не брал"} · ${u.intro_used?"«Старт» использован":"«Старт» не брал"}</div>
+ <div>Автопродление</div><div>${ap&&ap.active?`<span class="pill ok">вкл</span> ${esc(ap.card||"")} · ${ap.amount} ₽ · ${dt(ap.next_at)}${ap.fails?` · <span class="dn">ошибок ${ap.fails}</span>`:""}`:ap?'<span class="pill">выключено</span>':"—"}</div>
+ <div>Промокоды</div><div>${d.promos.map(esc).join(", ")||"—"}</div>
+ ${u.me_url?`<div>Кабинет</div><div><a href="${esc(u.me_url)}" target="_blank">открыть</a> · <span class="mut sm">${esc(u.sub_url)}</span></div>`:""}</div></div>
+ <div class="card mt" id="uvpn"><h3>🛰 VPN</h3><div class="mut sm">Загружаю данные из панели…</div></div>
+ <div class="card mt"><h3>⚡ Действия</h3>
+ <div class="grid k3"><div><label class="f">Начислить дни</label><div class="row"><input type="number" id="ad" value="7" min="1" style="width:90px"><label class="row sm mut"><input type="checkbox" id="adn" checked> уведомить</label><button class="btn p s" onclick="uact(${id},'add_days',$('#ad').value,{notify:$('#adn').checked})">+ Дни</button><button class="btn s" onclick="uact(${id},'sub_days',$('#ad').value)">− Дни</button></div></div>
+ <div><label class="f">Доступ до даты</label><div class="row"><input type="date" id="sd" style="width:170px"><button class="btn s" onclick="uact(${id},'set_exp',$('#sd').value)">Сохранить</button></div></div>
+ <div><label class="f">Тариф (кол-во устройств)</label><div class="row"><select id="sp" style="width:200px">${d.plans.map(p=>`<option value="${p.k}" ${p.k===u.plan?"selected":""}>${esc(p.t)}</option>`).join("")}</select><button class="btn s" onclick="uact(${id},'set_plan',$('#sp').value)">OK</button></div></div></div>
+ <div class="grid k3"><div><label class="f">Лимит устройств · сейчас: ${u.dev_limit==null?("по тарифу ("+(u.dev_limit_plan||"∞")+")"):(u.dev_limit==0?"без лимита":u.dev_limit)}</label><div class="row"><input type="number" id="udl" min="0" max="20" value="${u.dev_limit==null?(u.dev_limit_plan||0):u.dev_limit}" style="width:90px"><button class="btn p s" onclick="uact(${id},'set_devices',$('#udl').value)">Сохранить</button><button class="btn s" onclick="uact(${id},'set_devices',0)">♾ Без лимита</button><button class="btn s" onclick="uact(${id},'set_devices','')">↩️ По тарифу</button></div></div></div>
+ <label class="f">Сообщение от бота (HTML)</label><div class="row"><input type="text" id="um" placeholder="Текст сообщения пользователю" style="flex:1;min-width:200px"><button class="btn s" onclick="uact(${id},'message',$('#um').value)">Отправить</button></div>
+ <div class="row mt">${u.revoked?`<button class="btn s" onclick="uact(${id},'restore')">✅ Вернуть доступ</button>`:`<button class="btn d s" onclick="if(confirm('Отключить VPN-доступ?'))uact(${id},'revoke')">⛔ Отключить доступ</button>`}
+ <button class="btn s" onclick="uact(${id},'reset_trial')">🔄 Сбросить пробный</button><button class="btn s" onclick="uact(${id},'reset_intro')">🔄 Сбросить «Старт»</button>
+ ${ap&&ap.active?`<button class="btn d s" onclick="if(confirm('Отключить автопродление?'))uact(${id},'autopay_off')">Отключить автоплатёж</button>`:""}</div></div>
+ <div class="grid k2 mt"><div class="card"><h3>💰 Платежи</h3><div class="tw"><table>${d.payments.map(p=>`<tr><td class="sm">${dt(p.ts)}</td><td class="sm">${esc(p.plan)}<div class="mut">${esc(p.provider)}</div></td><td class="num"><b>${rub(p.amount)}</b></td></tr>`).join("")||`<tr><td class="empty">Нет</td></tr>`}</table></div></div>
+ <div class="card"><h3>🤝 Приглашённые</h3><div class="tw"><table>${d.invited.map(x=>`<tr class="cl" onclick="go('user/${x.tg_id}')"><td>${esc(x.name||x.tg_id)}<div class="mut sm">${dt(x.created,0)}</div></td><td class="num">${x.days>0?`<span class="pill ok">+${x.days} дн</span>`:x.days===0?'<span class="pill">лимит</span>':x.days===-1?'<span class="pill">до новой программы</span>':'<span class="pill w">ждём канал</span>'}${x.paid?' <span class="pill v">платит</span>':""}</td></tr>`).join("")||`<tr><td class="empty">Нет</td></tr>`}</table></div></div></div>
+ <div class="card mt"><h3>🕓 События</h3><div class="tw"><table>${d.events.map(e=>`<tr><td class="sm" style="white-space:nowrap">${dt(e.ts)}</td><td class="sm"><b>${esc(e.kind)}</b> <span class="mut">${esc(e.meta||"")}</span></td></tr>`).join("")||`<tr><td class="empty">Нет</td></tr>`}</table></div></div>`;
+ $("#main").innerHTML=h;loadVpn(id)}
+function fb(b){b=+b||0;const u=["Б","КБ","МБ","ГБ","ТБ"];let i=0;while(b>=1024&&i<4){b/=1024;i++}return (i<2?Math.round(b):b.toFixed(b<10?2:1).replace(/\.0+$/,""))+" "+u[i]}
+async function loadVpn(id){const el=$("#uvpn");if(!el)return;let r;
+ try{r=(await api("uvpn/"+id)).vpn}catch(e){el.innerHTML=`<h3>🛰 VPN</h3><div class="dn sm">${esc(e.message)}</div>`;return}
+ if(!$("#uvpn"))return;
+ if(!r){el.innerHTML=`<h3>🛰 VPN</h3><div class="mut sm">Ключ в панели ещё не создан</div>`;return}
+ if(r.error){el.innerHTML=`<h3>🛰 VPN</h3><div class="dn sm">Панель недоступна: ${esc(r.error)}</div>`;return}
+ const now=Date.now()/1000,on=r.online_at&&now-r.online_at<120;const dl=r.daily||[];const tod=dl[dl.length-1]||0,w=dl.slice(-7).reduce((a,b)=>a+b,0),t14=dl.reduce((a,b)=>a+b,0),mx=Math.max(1,...dl);
+ const st={ACTIVE:'<span class="pill ok">активен</span>',DISABLED:'<span class="pill bad">отключён</span>',EXPIRED:'<span class="pill w">истёк</span>',LIMITED:'<span class="pill w">лимит</span>'}[r.status]||esc(r.status||"—");
+ const lim=r.limit?r.limit:"∞";
+ el.innerHTML=`<h3>🛰 VPN <span class="sp"></span><button class="btn s" onclick="loadVpn(${id})">↻ Обновить</button></h3>
+ <div class="grid k4">${kpi("Статус",on?"🟢 онлайн":r.online_at?"⚪ офлайн":"не подключался",r.online_at?(on?"сейчас":"был "+ago(r.online_at)):"")}${kpi("Сегодня",fb(tod),"за 7 дн: "+fb(w))}${kpi("За 14 дней",fb(t14),"за период подписки: "+fb(r.used))}${kpi("Всего",fb(r.lifetime),r.first_at?"с "+dt(r.first_at):"")}</div>
+ <div class="kv mt"><div>В панели</div><div>${st}${r.last_node?` · последний сервер <b>${esc(r.last_node)}</b>`:""}</div>
+ <div>Подписка открыта</div><div>${r.sub_opened?ago(r.sub_opened):"—"}${r.sub_ua?` · <span class="mut sm">${esc(r.sub_ua)}</span>`:""}</div></div>
+ <div class="mt"><label class="f">Трафик по дням (14 дн.)</label><div style="display:flex;align-items:flex-end;gap:4px;height:110px;padding-top:6px">${dl.map((v,i)=>`<div title="${esc((r.labels||[])[i]||"")}: ${fb(v)}" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0"><div style="width:100%;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#53D8FF,#1685FF);height:${v?Math.max(3,Math.round(v/mx*90)):0}px"></div><div class="mut" style="font-size:10px;margin-top:3px;white-space:nowrap">${esc(((r.labels||[])[i]||"").slice(0,5))}</div></div>`).join("")}</div></div>
+ <div class="grid k2 mt"><div><label class="f">По серверам (14 дн.)</label><div class="tw"><table>${(r.nodes||[]).map(n=>`<tr><td>${esc(n.name)}</td><td class="num"><b>${fb(n.bytes)}</b></td><td class="num mut sm">${t14?Math.round(n.bytes/t14*100):0}%</td></tr>`).join("")||`<tr><td class="empty">Нет трафика</td></tr>`}</table></div></div>
+ <div><label class="f">Устройства: ${(r.devices||[]).length} из ${lim}</label><div class="tw"><table>${(r.devices||[]).map(d=>`<tr><td><b>${esc(d.model||d.platform||"Устройство")}</b><div class="mut sm">${esc([d.platform,d.os].filter(Boolean).join(" "))}${d.ua?" · "+esc(d.ua):""}</div><div class="mut sm">добавлено ${dt(d.created)}${d.updated?" · активно "+ago(d.updated):""}</div></td><td class="num"><button class="btn d s" data-h="${esc(d.hwid)}" onclick="if(confirm('Удалить устройство? Пользователь сможет подключить его заново.'))devDel(${id},this.dataset.h)">Удалить</button></td></tr>`).join("")||`<tr><td class="empty">Нет устройств</td></tr>`}</table></div></div></div>`}
+async function devDel(id,h){try{const r=await api("user/"+id,{json:{action:"dev_del",value:h}});toast("✅ "+r.msg);loadVpn(id)}catch(e){toast(e.message,1)}}
+async function uact(id,action,value,extra={}){try{const r=await api("user/"+id,{json:{action,value,...extra}});toast("✅ "+r.msg);vUser(id)}catch(e){toast(e.message,1)}}
+
+/* ---------------- Рассылки ---------------- */
+let BCIMG=null,BCPATH=null;
+async function vBc(){
+ loading();const d=await api("bc");const sg=d.segments;
+ let h=head("Рассылки");
+ h+=`<div class="grid k2"><div class="card"><h3>✍️ Новая рассылка</h3>
+ <label class="f">Кому</label><select id="bseg">${Object.entries(sg).map(([k,v])=>`<option value="${k}">${esc(v.title)} — ${fmt(v.count)}</option>`).join("")}<option value="ids">Список Telegram ID…</option></select>
+ <div id="bidsW" style="display:none"><label class="f">Telegram ID (через запятую/пробел/с новой строки)</label><textarea id="bids" style="min-height:80px"></textarea></div>
+ <label class="f">Текст (HTML: &lt;b&gt;, &lt;i&gt;, &lt;a href&gt;, &lt;code&gt;, &lt;blockquote&gt;)</label><textarea id="btext" placeholder="Привет! 🔥 ..."></textarea>
+ <div class="row sm mut" style="justify-content:space-between"><span id="blen">0 символов</span><span><a href="javascript:void(0)" onclick="wrap('b')">Ж</a> · <a href="javascript:void(0)" onclick="wrap('i')"><i>К</i></a> · <a href="javascript:void(0)" onclick="wrapLink()">ссылка</a></span></div>
+ <label class="f">Картинка (необязательно)</label><input type="file" id="bimg" accept="image/*">
+ <div class="grid k2"><div><label class="f">Кнопка: текст</label><input type="text" id="bbt" placeholder="🚀 Открыть бота"></div><div><label class="f">Кнопка: ссылка</label><input type="text" id="bbu" placeholder="https://t.me/${BOT}"></div></div>
+ <div class="row mt"><button class="btn s" id="btest">🧪 Тест себе</button><button class="btn p" id="bgo">📣 Запустить рассылку</button></div>
+ <div class="note">Перед запуском сообщение придёт вам для проверки. Скорость ~20 сообщений/сек, рассылка продолжится даже после перезапуска бота. Заблокировавшие бота исключаются автоматически.</div></div>
+ <div class="card"><h3>👁 Предпросмотр</h3><div class="preview" id="bprev"><span class="mut">Начните писать текст…</span></div></div></div>
+ <div class="card mt"><h3>История<span class="sp"></span><button class="btn s" onclick="vBc()">🔄 Обновить</button></h3><div class="tw"><table><tr><th>#</th><th>Когда</th><th>Кому</th><th>Текст</th><th>Прогресс</th><th></th></tr>
+ ${d.rows.map(b=>{const p=b.total?Math.round(100*b.pos/b.total):100;return `<tr><td>${b.id}</td><td class="sm">${dt(b.ts)}</td><td class="sm">${esc(b.seg)}</td><td class="sm" style="max-width:280px">${esc(b.text.replace(/<[^>]+>/g,"")).slice(0,90)}${b.photo?" 🖼":""}</td>
+ <td style="min-width:150px"><div class="prog"><i style="width:${p}%"></i></div><div class="sm mut">${fmt(b.sent)} доставлено · ${fmt(b.failed)} ошибок · ${b.status==="running"?`<b class="up">идёт ${p}%</b>`:b.status==="done"?"готово":b.status==="cancelled"?"остановлена":esc(b.status)}</div></td>
+ <td>${b.status==="running"?`<button class="btn d s" onclick="bcCancel(${b.id})">Стоп</button>`:""}</td></tr>`}).join("")||`<tr><td colspan=6 class="empty">Рассылок ещё не было</td></tr>`}</table></div></div>`;
+ $("#main").innerHTML=h;
+ const upd=()=>{const t=$("#btext").value;$("#blen").textContent=t.length+" символов"+(BCIMG&&t.length>1024?" — слишком длинно для подписи к картинке (макс. 1024)":"");
+  $("#bprev").innerHTML=(BCIMG?`<img src="${BCIMG}">`:"")+(t?sanit(t):'<span class="mut">Начните писать текст…</span>')+($("#bbt").value?`<div class="pb">${esc($("#bbt").value)}</div>`:"")};
+ ["btext","bbt"].forEach(i=>$("#"+i).oninput=upd);
+ $("#bseg").onchange=e=>{$("#bidsW").style.display=e.target.value==="ids"?"":"none"};
+ $("#bimg").onchange=e=>{const f=e.target.files[0];BCPATH=null;if(!f){BCIMG=null;upd();return}const r=new FileReader();r.onload=()=>{BCIMG=r.result;upd()};r.readAsDataURL(f)};
+ $("#btest").onclick=()=>bcSend(1);$("#bgo").onclick=()=>bcSend(0);
+ clearTimeout(ST.bcT);if(d.rows.some(b=>b.status==="running"))ST.bcT=setTimeout(()=>{if(location.hash==="#bc")vBc()},5000)}
+function sanit(t){const ok=/^<\/?(b|strong|i|em|u|ins|s|strike|del|code|pre|blockquote|tg-spoiler|a(\s+href="[^"]*")?)>$/i;return t.replace(/<[^>]*>|[^<]+/g,m=>m[0]==="<"?(ok.test(m)?m:esc(m)):m.replace(/&(?!(amp|lt|gt|quot|#\d+);)/g,"&amp;"))}
+function wrap(tag){const a=$("#btext"),s=a.selectionStart,e=a.selectionEnd;a.value=a.value.slice(0,s)+`<${tag}>`+a.value.slice(s,e)+`</${tag}>`+a.value.slice(e);a.dispatchEvent(new Event("input"))}
+function wrapLink(){const u=prompt("Ссылка (https://…)");if(!u)return;const a=$("#btext"),s=a.selectionStart,e=a.selectionEnd;a.value=a.value.slice(0,s)+`<a href="${u}">`+(a.value.slice(s,e)||"ссылка")+`</a>`+a.value.slice(e);a.dispatchEvent(new Event("input"))}
+async function bcSend(test){
+ const seg=$("#bseg").value,opt=$("#bseg").selectedOptions[0].textContent;
+ if(!test&&!confirm(`Запустить рассылку?\n\nКому: ${opt}\n\nСначала копия придёт вам.`))return;
+ const fd=new FormData();fd.append("text",$("#btext").value);fd.append("segment",seg);fd.append("btn_text",$("#bbt").value);fd.append("btn_url",$("#bbu").value);fd.append("ids",$("#bids").value);fd.append("test",test?"1":"0");
+ if(BCPATH)fd.append("photo_path",BCPATH);else if($("#bimg").files[0])fd.append("photo",$("#bimg").files[0]);
+ const btn=test?$("#btest"):$("#bgo");btn.disabled=true;
+ try{const r=await api("bc",{method:"POST",body:fd});if(r.photo_path)BCPATH=r.photo_path;toast(test?"✅ Тестовое сообщение отправлено вам в Telegram":`✅ Рассылка #${r.id} запущена: ${fmt(r.total)} получателей`);if(!test)vBc()}
+ catch(e){toast(e.message,1)}finally{btn.disabled=false}}
+async function bcCancel(id){if(!confirm("Остановить рассылку?"))return;await api("bc_cancel/"+id,{json:{}});toast("Останавливаю…");setTimeout(vBc,1500)}
+
+/* ---------------- Автоплатежи ---------------- */
+async function vAutopay(){
+ loading();const d=await api("autopay");const t=d.total;
+ let h=head("Автоплатежи");
+ if(!d.yk_ready)h+=`<div class="note warn" style="margin-bottom:14px">ЮKassa не подключена — автосписания и предложение «1 ₽» не работают. Укажите shopId и ключ в <a href="#settings">Настройках</a>.</div>`;
+ h+=`<div class="grid k4">${kpi("Активных",fmt(t.active),`выключено ${fmt(t.off)}`,"hl")}${kpi("Спишется за 24 ч",rub(t.due24),"прогноз")}${kpi("Спишется за 7 дней",rub(t.due7),"прогноз")}${kpi("Выручка автопродлений",rub(t.renew_rev),`с ошибками сейчас: ${fmt(t.failing)}`)}</div>
+ <div class="card mt"><div class="tw"><table><tr><th>Пользователь</th><th>Карта</th><th class="num">Сумма</th><th>Следующее</th><th>Статус</th></tr>
+ ${d.rows.map(r=>`<tr class="cl" onclick="go('user/${r.tg_id}')"><td><b>${esc(r.name||r.tg_id)}</b><div class="mut sm">${r.tg_id}</div></td><td class="sm">${esc(r.card||"—")}</td><td class="num">${rub(r.amount)}</td><td class="sm">${r.active?dt(r.next_at)+`<div class="mut">${ago(r.next_at)}</div>`:"—"}</td>
+ <td>${r.active?(r.fails?`<span class="pill w">ошибок ${r.fails}</span><div class="mut sm">${esc(r.err||"")}</div>`:'<span class="pill ok">активно</span>'):`<span class="pill">выкл ${dt(r.off_at,0)}</span>`}</td></tr>`).join("")||`<tr><td colspan=5 class="empty">Пока никто не подключил автопродление</td></tr>`}</table></div></div>`;
+ $("#main").innerHTML=h}
+
+/* ---------------- Рефералы ---------------- */
+async function vRefs(){
+ loading();const d=await api("refs");const t=d.total,c=d.cfg;
+ let h=head("Реферальная программа");
+ h+=`<div class="note" style="margin-top:0;margin-bottom:14px">Сейчас: <b>+${c.days} дн.</b> за друга, ${c.mode==="join"?"который запустил бота и подписался на канал":"который оплатил подписку"}; максимум <b>${c.max}</b> друзей на человека. Изменить — в <a href="#settings">Настройках</a>.</div>
+ <div class="grid k4">${kpi("Пришли по ссылкам",fmt(t.invited),`от ${fmt(t.referrers)} пригласивших`,"hl")}${kpi("Засчитано",fmt(t.credited),`выдано ${fmt(t.days)} дн · сверх лимита ${fmt(t.capped)}`)}${kpi("Из них оплатили",fmt(t.invited_paid),pct(t.invited_paid,t.invited))}${kpi("Выручка с рефералов",rub(t.rev),"")}</div>
+ <div class="card mt"><h3>🏆 Топ пригласивших</h3><div class="tw"><table><tr><th>Пользователь</th><th class="num">Пригласил</th><th class="num">Засчитано</th><th class="num">Дней</th><th class="num">Оплатили</th></tr>
+ ${d.top.map(r=>`<tr class="cl" onclick="go('user/${r.tg_id}')"><td><b>${esc(r.name||r.tg_id)}</b><div class="mut sm">${r.tg_id}</div></td><td class="num">${fmt(r.invited)}</td><td class="num">${fmt(r.credited)}</td><td class="num">${fmt(r.days)}</td><td class="num">${fmt(r.paid)}</td></tr>`).join("")||`<tr><td colspan=5 class="empty">Нет данных</td></tr>`}</table></div></div>`;
+ $("#main").innerHTML=h}
+
+/* ---------------- Промокоды ---------------- */
+async function vPromo(){
+ loading();const d=await api("promos");
+ let h=head("Промокоды");
+ h+=`<div class="card"><h3>➕ Создать / изменить</h3><div class="grid k4"><div><label class="f">Код</label><input type="text" id="pc" placeholder="LETO"></div><div><label class="f">Дней</label><input type="number" id="pd" value="7"></div><div><label class="f">Лимит активаций</label><input type="number" id="pm" value="100"></div><div><label class="f">&nbsp;</label><button class="btn p" style="width:100%" onclick="promoSave()">Сохранить</button></div></div></div>
+ <div class="card mt"><div class="tw"><table><tr><th>Код</th><th class="num">Дней</th><th class="num">Активаций</th><th class="num">Потом оплатили</th><th></th></tr>
+ ${d.rows.map(p=>`<tr><td><b>${esc(p.code)}</b></td><td class="num">${p.days}</td><td class="num">${fmt(p.used)} / ${fmt(p.max)}</td><td class="num">${fmt(p.paid)} <span class="mut sm">${pct(p.paid,p.used)}</span></td><td class="num"><button class="btn d s" onclick="promoDel('${esc(p.code)}')">Удалить</button></td></tr>`).join("")||`<tr><td colspan=5 class="empty">Промокодов нет</td></tr>`}</table></div></div>`;
+ $("#main").innerHTML=h}
+async function promoSave(){try{await api("promos",{json:{code:$("#pc").value,days:$("#pd").value,max:$("#pm").value}});toast("✅ Сохранено");vPromo()}catch(e){toast(e.message,1)}}
+async function promoDel(c){if(!confirm("Удалить промокод "+c+"?"))return;await api("promos",{json:{code:c,delete:1}});vPromo()}
+
+/* ---------------- Настройки ---------------- */
+async function vSettings(){
+ loading();const d=await api("settings");
+ let h=head("Настройки");
+ h+=d.groups.map((g,gi)=>`<div class="card ${gi?"mt":""}"><h3>${g.g}${g.g.includes("ЮKassa")?`<span class="sp"></span><button class="btn s" onclick="ykTest()">Проверить подключение</button>`:""}</h3>
+ ${g.items.map(it=>`<div class="set"><div class="t">${esc(it.t)}</div><div class="c" style="${it.type==="bool"?"width:auto":""}">${field(it)}</div></div>`).join("")}${g.note?`<div class="note">${esc(g.note)}</div>`:""}</div>`).join("");
+ h+=`<div class="row mt" style="position:sticky;bottom:calc(76px + var(--sb));justify-content:flex-end"><button class="btn p" onclick="saveSettings()">💾 Сохранить изменения</button></div>`;
+ $("#main").innerHTML=h;ST.sorig=collect()}
+function field(it){const id="s_"+it.k;
+ if(it.type==="bool")return `<label class="sw"><input type="checkbox" id="${id}" data-k="${it.k}" ${it.v?"checked":""}><span></span></label>`;
+ if(it.type==="select")return `<select id="${id}" data-k="${it.k}">${it.opts.map(o=>`<option value="${esc(o[0])}" ${String(o[0])===String(it.v)?"selected":""}>${esc(o[1])}</option>`).join("")}</select>`;
+ if(it.type==="secret")return `<input type="password" id="${id}" data-k="${it.k}" placeholder="${it.v?esc(it.v)+" (сохранён)":"не задан"}" autocomplete="new-password">`;
+ return `<input type="${it.type==="int"?"number":"text"}" id="${id}" data-k="${it.k}" value="${esc(it.v)}">`}
+function collect(){const o={};document.querySelectorAll("[data-k]").forEach(el=>{if(!el.id||!el.id.startsWith("s_"))return;o[el.dataset.k]=el.type==="checkbox"?el.checked:el.value});return o}
+async function saveSettings(){const cur=collect(),ch={};for(const k in cur){if(String(cur[k])!==String(ST.sorig[k])&&!(k==="yk_secret"&&!cur[k]))ch[k]=cur[k]}
+ if(!Object.keys(ch).length){toast("Нет изменений");return}
+ try{const r=await api("settings",{json:ch});toast("✅ Сохранено: "+r.changed.length);vSettings()}catch(e){toast(e.message,1)}}
+async function ykTest(){try{const r=await api("yk_test",{json:{}});toast(`✅ ЮKassa: магазин ${r.account}, ${r.status}${r.test?" (тестовый)":""}`)}catch(e){toast(e.message,1)}}
+
+/* ---------------- Админы ---------------- */
+async function vAdmins(){
+ loading();const d=await api("admins");
+ let h=head("Администраторы");
+ h+=`<div class="card"><h3>👑 Владельцы</h3><table>${d.seed.map(a=>`<tr><td><b>${esc(a.name||"—")}</b> <span class="mut sm">${a.tg_id}</span></td><td class="num"><span class="pill v">владелец</span></td></tr>`).join("")}</table>
+ <h3 class="mt">Администраторы</h3><table>${d.extra.map(a=>`<tr><td><b>${esc(a.name||"—")}</b> <span class="mut sm">${a.tg_id}</span></td><td class="num"><button class="btn d s" onclick="admRm(${a.tg_id})">Убрать</button></td></tr>`).join("")||`<tr><td class="mut">Нет</td></tr>`}</table>
+ <label class="f">Добавить по Telegram ID</label><div class="row"><input type="number" id="nad" placeholder="123456789" style="max-width:220px"><button class="btn p s" onclick="admAdd()">Добавить</button></div>
+ <div class="note">Админ получает доступ к админке в боте и к этой панели (вход по команде /panel в боте).</div></div>
+ <div class="card mt"><h3>🔐 Активные входы<span class="sp"></span><button class="btn s" onclick="sessReset()">Выйти на других устройствах</button></h3><div class="tw"><table>${d.sessions.map(s=>`<tr><td class="sm">${dt(s.created)}</td><td class="sm">${s.tg_id}</td><td class="sm mut">${esc(s.ip||"")}</td><td class="sm mut">${esc((s.ua||"").slice(0,70))}</td></tr>`).join("")}</table></div></div>`;
+ $("#main").innerHTML=h}
+async function admAdd(){try{await api("admins",{json:{tg_id:$("#nad").value}});toast("✅ Добавлен");vAdmins()}catch(e){toast(e.message,1)}}
+async function admRm(id){if(!confirm("Убрать админа "+id+"?"))return;try{await api("admins",{json:{tg_id:id,remove:1}});vAdmins()}catch(e){toast(e.message,1)}}
+async function sessReset(){await api("sessions_reset",{json:{}});toast("✅ Другие сессии завершены");vAdmins()}
+
+/* ---------------- router ---------------- */
+
+/* ---------------- Серверы (16.11.2026) ---------------- */
+function bytesH(b){b=+b||0;const u=["Б","КБ","МБ","ГБ","ТБ"];let i=0;while(b>=1024&&i<4){b/=1024;i++}return (i<2?Math.round(b):b.toFixed(1))+" "+u[i]}
+function upH(s){s=+s||0;if(!s)return"—";const d=Math.floor(s/86400),hh=Math.floor(s%86400/3600);return d?`${d} дн ${hh} ч`:`${hh} ч ${Math.floor(s%3600/60)} мин`}
+const FLAG={FI:"🇫🇮",ES:"🇪🇸",DE:"🇩🇪",NL:"🇳🇱",RU:"🇷🇺"};
+async function vSrv(){
+ loading();const d=await api("infra");
+ const okN=d.nodes.filter(n=>n.ok).length, okR=d.relay.filter(r=>r.ms!=null).length;
+ let h=head("Серверы",`<button class="btn" onclick="vSrv()">⟳ Обновить</button>`);
+ h+=`<div class="grid k4">${kpi("Ноды онлайн",`${okN} / ${d.nodes.length}`,okN===d.nodes.length?"все работают":"есть проблемы",okN===d.nodes.length?"hl":"")}
+ ${kpi("Пользователей онлайн",fmt(d.online_total),"сейчас подключены")}
+ ${kpi("RU-вход (релей)",`${okR} / ${d.relay.length}`,"ru.vertuwpn.ru · порты 8441–8444")}
+ ${kpi("Подписка",d.sub.cloudflare.code===404||d.sub.cloudflare.code===200?`${d.sub.cloudflare.ms} мс`:"ошибка","sub.vertuwpn.ru · Yandex-зеркало subya.vertuwpn.ru")}</div>`;
+ h+=`<div class="grid k2 mt">`+d.nodes.map(n=>`<div class="card"><h3>${FLAG[n.cc]||"🌐"} ${esc(n.name)}<span class="sp"></span><span class="pill ${n.ok?"ok":"bad"}">${n.ok?"● работает":(n.disabled?"выключена":"○ нет связи")}</span></h3>
+ <div class="row"><span class="pill">IP ${esc(n.addr)}</span><span class="pill">онлайн ${fmt(n.online)}</span><span class="pill">трафик ${bytesH(n.traffic)}</span>
+ <span class="pill">xray ${esc(n.xray||"—")}</span><span class="pill">аптайм ${upH(n.uptime)}</span>${n.cpu?`<span class="pill">${n.cpu} CPU · ${esc(n.ram||"")}</span>`:""}</div>
+ ${n.msg&&!n.ok?`<div class="note warn mt">${esc(n.msg)}</div>`:""}</div>`).join("")+`</div>`;
+ h+=`<div class="grid k2 mt"><div class="card"><h3>🇷🇺 RU-вход → выходы</h3><div class="tw"><table>${d.relay.map(r=>`<tr><td><b>${esc(r.name)}</b><div class="mut sm">ru.vertuwpn.ru:${r.port}</div></td><td class="num">${r.ms!=null?`<span class="pill ok">● ${r.ms} мс</span>`:`<span class="pill bad">○ недоступен</span>`}</td></tr>`).join("")}</table></div></div>
+ <div class="card"><h3>🔑 Ключи в подписке</h3><div class="tw"><table>${d.hosts.map(x=>`<tr><td><b>${esc(x.remark)}</b><div class="mut sm">${esc(x.addr)}</div></td><td class="num">${x.on?'<span class="pill ok">вкл</span>':'<span class="pill">выкл</span>'}</td></tr>`).join("")}</table></div></div></div>
+ <div class="mut sm mt">Обновлено ${dt(d.ts)} · ключи «🛡 Обход» идут через Yandex CDN (ya1/ya2.widumpn.com, static.vertuwpn.ru); RU-вход проверяется самим RU-сервером раз в минуту.</div>`;
+ $("#main").innerHTML=h}
+
+
+/* ---------------- 🛠 Управление инфраструктурой ---------------- */
+let OPS_T=null;
+async function opsPost(body,okmsg){try{const r=await api("ops",{json:body});if(okmsg)toast(okmsg);return r}catch(e){toast(e.message,1);throw e}}
+async function opsToggle(u,on){await opsPost({op:"host",uuid:u,on},on?"Сервер показан в подписке":"Сервер скрыт из подписки");vOps()}
+async function opsSaveHost(u){
+ const name=$("#hn_"+u), pos=$("#hp_"+u); if(!name||!pos)return;
+ const n=name.value.trim(), p=Number(pos.value);
+ if(!n){toast("Название не может быть пустым",1);return}
+ if(!Number.isInteger(p)||p<0){toast("Позиция должна быть целым числом от 0",1);return}
+ await opsPost({op:"host_edit",uuid:u,remark:n,viewPosition:p},"Название и позиция сохранены"); vOps()
+}
+async function opsRu(){const ip=$("#ruIp").value.trim();if(!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)){$("#ruErr").textContent="Введите IPv4, например 194.67.120.56";return}
+ $("#ruErr").textContent="";if(!confirm(`Развернуть RU-вход на ${ip}${$("#ruDns").checked?" и переключить ru.vertuwpn.ru":""}?`))return;
+ await opsPost({op:"ru",ip,switch_dns:$("#ruDns").checked},"Задача запущена");vOps()}
+async function opsCdn(){const name=$("#cdnName").value.trim().toLowerCase();if(!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(name)){$("#cdnErr").textContent="Введите поддомен, например edge2.vertuwpn.ru";return}
+ let sa=$("#cdnSa").value.trim();if(sa){try{JSON.parse(sa)}catch(e){$("#cdnErr").textContent="Ключ сервисного аккаунта должен быть JSON-файлом authorized_key.json";return}}
+ $("#cdnErr").textContent="";
+ await opsPost({op:"cdn",name,aliases:$("#cdnAlias").value,origin:$("#cdnOrigin").value.trim(),sa_key:sa,cf_token:$("#cdnCf").value.trim(),test:$("#cdnTest").checked},"Развёртывание CDN запущено");vOps()}
+function opsCopy(){navigator.clipboard.writeText($("#pubk").textContent).then(()=>toast("Ключ скопирован"))}
+async function vOps(){
+ clearTimeout(OPS_T);const first=!$("#opsRoot");if(first)loading();
+ const d=await api("ops");const rh=d.relay_health||{},ports=rh.ports||{},age=rh.ts?Math.round(Date.now()/1000-rh.ts):null;
+ const P={"8441":"🇫🇮 FI","8442":"🇪🇸 ES","8443":"🇩🇪 DE","8444":"🇳🇱 NL"};
+ let h=`<div id="opsRoot">`+head("Управление",`<button class="btn" onclick="vOps()">⟳ Обновить</button>`);
+ h+=`<div class="card"><h3>🔑 Серверы в подписке<span class="sp"></span><span class="mut sm">название и позиция сохраняются в подписке · 0 = первая</span></h3><div class="tw"><table>`+
+  d.hosts.map(x=>`<tr><td style="min-width:260px"><input id="hn_${x.uuid}" value="${esc(x.remark||"")}" style="min-width:220px"><div class="mut sm">${esc(x.address)}:${x.port}</div></td><td style="width:110px"><label class="mut sm">Позиция</label><input id="hp_${x.uuid}" type="number" min="0" step="1" value="${Number(x.viewPosition)||0}" style="width:90px"></td><td class="num">${x.on?`<span class="pill ok">в подписке</span>`:`<span class="pill">скрыт</span>`}<div class="mt"><button class="btn p s" onclick="opsSaveHost('${x.uuid}')">Сохранить</button> <button class="btn s" onclick="opsToggle('${x.uuid}',${!x.on})">${x.on?"Скрыть":"Показать"}</button></div></td></tr>`).join("")+`</table></div></div>`;
+ h+=`<div class="grid k2 mt"><div class="card"><h3>🇷🇺 RU-вход</h3>
+  <div class="row"><span class="pill">ru.vertuwpn.ru → <b>${esc(d.ru_ip||"—")}</b></span>${age!=null?`<span class="pill ${age<180?"ok":"bad"}">отчёт ${age<180?"свежий":"устарел"} · ${age} с</span>`:""}</div>
+  <div class="row mt">${Object.entries(P).map(([p,n])=>`<span class="pill ${ports[p]!=null?"ok":"bad"}">${n} ${ports[p]!=null?ports[p]+" мс":"нет"}</span>`).join("")}</div>
+  <p class="mut sm mt">Замена: 1) добавьте ключ ниже в <code>/root/.ssh/authorized_keys</code> нового сервера (Ubuntu/Debian); 2) введите IP — система поставит релей, пропишет FI-хоп, отчёт о здоровье и переключит DNS. Ключи пользователей менять не нужно.</p>
+  <div class="note mt" style="word-break:break-all;font-family:monospace;font-size:12px" id="pubk">${esc(d.pubkey)}</div>
+  <button class="btn mt" onclick="opsCopy()">📋 Скопировать ключ</button>
+  <div class="mt"><input id="ruIp" placeholder="IP нового RU-сервера" style="width:100%"></div>
+  <label class="mut sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="ruDns" checked> сразу переключить ru.vertuwpn.ru на новый IP</label>
+  <div id="ruErr" style="color:var(--bad,#fb7185);font-size:13px"></div>
+  <button class="btn p mt" onclick="opsRu()">🚀 Развернуть RU-вход</button></div>
+ <div class="card"><h3>🛡 Новый CDN (GET-канал)</h3>
+  <p class="mut sm">Сам выпустит сертификат, создаст ресурс в Yandex CDN, DNS в Cloudflare и ключ «🛡 Обход», проверит из РФ и включит.</p>
+  <input id="cdnName" placeholder="поддомен, напр. edge2.vertuwpn.ru" style="width:100%" class="mt">
+  <input id="cdnAlias" placeholder="доп. адреса (необяз.), напр. ya3.widumpn.com" style="width:100%" class="mt">
+  <input id="cdnOrigin" placeholder="нода-источник (по умолч. 195.96.132.187:9443)" style="width:100%" class="mt">
+  <textarea id="cdnSa" rows="3" placeholder="JSON ключа сервисного аккаунта Yandex (пусто = сохранённый ${esc(d.yc_sa||"")})" style="width:100%" class="mt"></textarea>
+  <input id="cdnCf" placeholder="API-токен Cloudflare (пусто = текущий)" style="width:100%" class="mt">
+  <label class="mut sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="cdnTest" checked> проверить из РФ перед включением</label>
+  <div id="cdnErr" style="color:var(--bad,#fb7185);font-size:13px"></div>
+  <button class="btn p mt" onclick="opsCdn()">🚀 Развернуть CDN</button></div></div>`;
+ const jobs=d.jobs||[];
+ h+=`<div class="card mt"><h3>📜 Задачи</h3>`+(jobs.length?jobs.map(j=>`<details ${j.status==="running"?"open":""} class="mt"><summary><b>${esc(j.title)}</b> · <span class="pill ${j.status==="ok"?"ok":j.status==="error"?"bad":"w"}">${j.status==="ok"?"готово":j.status==="error"?"ошибка":"выполняется…"}</span> <span class="mut sm">${dt(j.started)}</span></summary><pre style="white-space:pre-wrap;font-size:12px;max-height:320px;overflow:auto">${esc(j.log.join("\n"))}</pre></details>`).join(""):`<div class="mut">Пока не было</div>`)+`</div></div>`;
+ const keep={ruIp:$("#ruIp")?.value,cdnName:$("#cdnName")?.value,cdnAlias:$("#cdnAlias")?.value,cdnOrigin:$("#cdnOrigin")?.value,cdnSa:$("#cdnSa")?.value,cdnCf:$("#cdnCf")?.value};
+ $("#main").innerHTML=h;for(const [k,v] of Object.entries(keep)){if(v&&$("#"+k))$("#"+k).value=v}
+ if(jobs.some(j=>j.status==="running")&&location.hash.startsWith("#ops"))OPS_T=setTimeout(vOps,4000)}
+
+
+/* ---------------- v4: иконки, верхнее меню, без смайликов, анимации ---------------- */
+const ICO={dash:"M4 4h6v8H4zM14 4h6v5h-6zM14 13h6v7h-6zM4 16h6v4H4z",funnel:"M4 4h16l-6 8v6l-4 2v-8z",pays:"M3 6h18v12H3zM3 10h18M7 15h3",
+users:"M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM3 21v-1a6 6 0 0 1 12 0v1M16 3.1a4 4 0 0 1 0 7.8M21 21v-1a6 6 0 0 0-4-5.6",bc:"M21 3 10 14M21 3l-7 18-4-7-7-4z",
+stats:"M4 20V11M10 20V5M16 20v-6M21 20H3",refs:"M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM8.6 13.5l6.8 4M15.4 6.5l-6.8 4",
+promo:"M3 7h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4zM14 7v12",srv:"M3 4h18v6H3zM3 14h18v6H3zM7 7h.01M7 17h.01",
+ops:"M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 4v4M9 10v4M17 16v4",settings:"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1",
+admins:"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",out:"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9",autopay:"M4 12a8 8 0 0 1 14-5.3M20 4v5h-5M20 12a8 8 0 0 1-14 5.3M4 20v-5h5",
+dr:"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM8.5 12l2.5 2.5 4.5-5",
+keys:"M15 7a4 4 0 1 1-3.5 6L5 19.5 3.5 18l1.5-1.5L3.5 15 5 13.5l1.5 1.5 4-4A4 4 0 0 1 15 7zM16 9h.01",
+auto:"M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"};
+const ic=k=>`<svg class="ic" viewBox="0 0 24 24"><path d="${ICO[k]||ICO.dash}"/></svg>`;
+const TOWER='<svg viewBox="0 0 24 24"><path d="M8.5 22 9.6 7.5 12 3l2.4 4.5L15.5 22Z"/></svg>';
+if(!NAV.find(n=>n[0]==="dr")){const i=NAV.findIndex(n=>n[0]==="srv");NAV.splice(i,0,["dr","","Отказоустойчивость"])}
+if(!NAV.find(n=>n[0]==="keys")){const i=NAV.findIndex(n=>n[0]==="srv");NAV.splice(i,0,["keys","","Ключи"])}
+if(!NAV.find(n=>n[0]==="auto")){const i=NAV.findIndex(n=>n[0]==="bc");NAV.splice(i,0,["auto","","Автоворонка"])}
+if(!NAV.find(n=>n[0]==="stats")){const i=NAV.findIndex(n=>n[0]==="bc");NAV.splice(i+1,0,["stats","","Статистика рассылок"])}
+function shell(){
+ $("#root").innerHTML=`<header class="tb"><div class="in"><div class="brand"><img class="blogo" src="/static/v/logo.webp" alt=""><div>VAYNAH <b>VPN</b><small>Панель управления</small></div></div><span class="sp"></span><span class="me" id="meName"></span><a class="out" href="logout">${ic("out")}Выйти</a></div>
+ <nav class="tnav">${NAV.map(([k,,t])=>`<a href="#${k}" data-k="${k}">${ic(k)}${t}</a>`).join("")}</nav></header><main id="main"></main>`;
+ api("me").then(m=>{$("#meName").textContent="Вы: "+(m.name||"")}).catch(()=>{});
+}
+function setNav(k){document.querySelectorAll(".tnav a").forEach(a=>{const on=a.dataset.k===k;a.classList.toggle("on",on);if(on)a.scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"})})}
+const EMO=/(?:\p{Extended_Pictographic}|\p{Regional_Indicator}|️|‍|⃣)+\s?/gu;
+function deEmoji(root){
+ root.querySelectorAll("h1,h2,h3,summary,.btn,button,.kpi .l,.kpi .s,.pill,label,th,.note,.seg button,.chip,.mut,p").forEach(el=>{
+  if(el.closest("td")&&!el.matches(".pill"))return;
+  el.childNodes.forEach(n=>{if(n.nodeType===3&&EMO.test(n.nodeValue)){EMO.lastIndex=0;n.nodeValue=n.nodeValue.replace(EMO,"")}EMO.lastIndex=0})})}
+function countUp(root){
+ root.querySelectorAll(".kpi .v").forEach(el=>{
+  const t=el.textContent, m=t.match(/^([^\d-]*)(-?[\d\s .,]+)(.*)$/); if(!m)return;
+  const num=parseFloat(m[2].replace(/[\s ]/g,"").replace(",","."));if(!isFinite(num)||num===0)return;
+  const dec=(m[2].split(/[.,]/)[1]||"").length, t0=performance.now(), D=900;
+  const f=x=>m[1]+(dec?x.toFixed(dec):Math.round(x).toLocaleString("ru-RU"))+m[3];
+  (function tick(now){const p=Math.min(1,(now-t0)/D),e=1-Math.pow(1-p,3);el.textContent=f(num*e);if(p<1)requestAnimationFrame(tick);else el.textContent=t})(t0)})}
+let _lastAnim="";
+const _mainObs=new MutationObserver(()=>{const mn=$("#main");if(!mn)return;_mainObs.disconnect();
+ deEmoji(mn);
+ if(!mn.querySelector(".sk")&&_lastAnim!==location.hash){_lastAnim=location.hash;mn.classList.remove("anim");void mn.offsetWidth;mn.classList.add("anim");countUp(mn)}
+ _mainObs.observe(mn,{childList:true})});
+window.addEventListener("hashchange",()=>{_lastAnim=""});
+const _origRoute=route;
+route=async function(){const mn=$("#main");if(mn){_mainObs.disconnect();_mainObs.observe(mn,{childList:true})}return _origRoute()};
+function loading(){$("#main").innerHTML=`<div class="grid k4">${'<div class="sk"></div>'.repeat(4)}</div><div class="grid k2 mt"><div class="sk" style="height:220px"></div><div class="sk" style="height:220px"></div></div>`}
+
+/* ---------------- Статистика рассылок и автоворонки ---------------- */
+async function vStats(){
+ loading();const d=await api("mailstats?days="+(ST.days&&ST.days>=7?ST.days:30));const k=d.kpi;
+ let h=head("Статистика рассылок",daysSeg("vStats",[[7,"7 дн"],[30,"30 дн"],[90,"90 дн"]]));
+ h+=`<div class="grid k4">${kpi("Рассылок",fmt(k.bc_count),"запущено всего","hl")}${kpi("Доставлено",fmt(k.bc_sent),`доставляемость ${k.bc_rate}%`)}
+ ${kpi("Ошибки",fmt(k.bc_failed),`заблокировали бота: ${fmt(k.bc_blocked)}`)}${kpi("Автоворонка",fmt(k.push_total),k.push_on?"включена":"выключена — включается в Настройках")}</div>
+ <div class="grid k4 mt">${kpi("Оплат после авто-сообщений",fmt(k.push_conv),"в течение 72 часов")}${kpi("Выручка от автоворонки",rub(k.push_rev),"оплаты за 72 ч после сообщения")}
+ ${kpi("Конверсия автоворонки",pct(k.push_conv,k.push_total),"оплатили после сообщения")}${kpi("Сценариев",fmt(d.camps.length),"разные типы сообщений")}</div>
+ <div class="grid k2 mt"><div class="card"><h3>Рассылки по дням</h3>${chart(d.bc_series,d.labels,"b")}<div class="tip"></div></div>
+ <div class="card"><h3>Автоворонка по дням</h3>${chart(d.push_series,d.labels,"b2")}<div class="tip"></div></div></div>`;
+ const mx=Math.max(1,...d.camps.map(c=>c.sent));
+ h+=`<div class="card mt"><h3>Сценарии автоворонки<span class="sp"></span><span class="mut sm">за ${d.days} дн</span></h3>`+(d.camps.length?`<div class="tw"><table><tr><th>Сценарий</th><th class="num">Отправлено</th><th style="width:30%"></th><th class="num">Оплатили</th><th class="num">Конверсия</th><th class="num">Выручка</th></tr>`+
+  d.camps.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="mut sm">${esc(c.camp)}</div></td><td class="num">${fmt(c.sent)}</td><td><div class="bar2"><i style="width:${Math.round(100*c.sent/mx)}%"></i></div></td><td class="num">${fmt(c.conv)}</td><td class="num">${pct(c.conv,c.sent)}</td><td class="num">${rub(c.rev)}</td></tr>`).join("")+`</table></div>`:`<div class="empty">Автоворонка ещё не отправляла сообщений. Включить её можно в разделе «Настройки» → «Умные авто-рассылки».</div>`)+`</div>`;
+ h+=`<div class="card mt"><h3>История рассылок<span class="sp"></span><a href="#bc" class="sm">новая рассылка →</a></h3>`+(d.bc.length?`<div class="tw"><table><tr><th>Дата</th><th>Текст</th><th>Сегмент</th><th class="num">Доставлено</th><th style="width:16%"></th><th class="num">Ошибки</th><th>Статус</th></tr>`+
+  d.bc.map(b=>{const tot=Math.max(1,b.total||b.sent+b.failed+b.blocked);return `<tr><td class="mut sm">${dt(b.ts)}</td><td>${esc(b.text)}</td><td><span class="pill">${esc(b.segment||"все")}</span></td><td class="num">${fmt(b.sent)} / ${fmt(b.total)}</td><td><div class="bar2"><i style="width:${Math.round(100*b.sent/tot)}%"></i></div></td><td class="num">${fmt(b.failed+b.blocked)}</td><td><span class="pill ${b.status==="done"?"ok":b.status==="running"?"w":""}">${esc(b.status||"")}</span></td></tr>`}).join("")+`</table></div>`:`<div class="empty">Рассылок пока не было.</div>`)+`</div>`;
+ $("#main").innerHTML=h;bindChartTips()}
+
+
+/* ---------------- 🔑 Ключи (keywatch) ---------------- */
+let KW_T=null;
+function spark(h){if(!h||!h.length)return `<div class="mut sm">история появится после первых проверок</div>`;return `<div class="spark" title="последние проверки: зелёные — работал, красные — нет">${h.map(v=>`<i class="${v?"":"r"}"></i>`).join("")}</div>`}
+async function vKeys(){
+ clearTimeout(KW_T);if(!$("#kwRoot"))loading();
+ const d=await api("keys");const H=d.hosts.filter(x=>!x.auto),A=d.hosts.find(x=>x.auto);
+ const inSub=H.filter(x=>x.enabled),ok=inSub.filter(x=>x.ok).length,off=H.filter(x=>x.auto_disabled).length;
+ const fast=H.filter(x=>x.ok&&x.mbps).sort((a,b)=>b.mbps-a.mbps)[0];
+ const st=d.running?`<span class="ld"></span>&nbsp; идёт проверка из РФ…`:(d.last_run?`проверено ${ago(d.last_run)}`:"ещё не проверялось");
+ let h=`<div id="kwRoot">`+head("Ключи",`<span class="mut sm">${st}</span><button class="btn p" onclick="kwCmd('check')" ${d.running?"disabled":""}>Проверить сейчас</button>`);
+ if(d.error)h+=`<div class="note warn" style="margin-bottom:14px">Последняя проверка не прошла: ${esc(d.error)}</div>`;
+ if(d.probe&&d.probe.ok===false)h+=`<div class="note warn" style="margin-bottom:14px">Не ответил ни один ключ — похоже на сбой RU-сервера проверки. Автоотключение приостановлено.</div>`;
+ h+=`<div class="grid k4">${kpi("Работают из РФ",`${ok} / ${inSub.length}`,ok===inSub.length&&ok?"все ключи в подписке живые":"есть неработающие",ok===inSub.length&&ok?"hl":"")}
+ ${kpi("Убраны автоматически",fmt(off),off?"вернутся сами, когда заработают":"всё в подписке")}
+ ${kpi("«Авто» у клиентов",A&&A.ok?`${A.ms} мс`:(A?"не отвечает":"—"),A&&A.mbps?`${A.mbps} Мбит/с · сам выбирает лучший`:"балансировщик в Happ")}
+ ${kpi("Самый быстрый",fast?`${fast.mbps} Мбит/с`:"—",fast?esc(fast.remark):"")}</div>`;
+ h+=`<div class="kgrid mt">`+(H.map(x=>{const s=x.auto_disabled?["bad","убран из подписки"]:x.ok===true?["ok","работает"]:x.ok===false?["bad","не отвечает"]:["w","ждёт проверки"];
+  return `<div class="card key ${s[0]}"><div class="kh"><span class="kdot ${s[0]}"></span><div style="flex:1;min-width:0"><b>${esc(x.remark)}</b><div class="mut sm">${esc(x.address)}:${esc(x.port)}</div></div><span class="pill ${s[0]}">${s[1]}</span></div>
+  <div class="kstats"><div><span class="mut sm">Пинг из РФ</span><b>${x.ms!=null?x.ms+" мс":"—"}</b></div><div><span class="mut sm">Скорость</span><b>${x.mbps!=null?x.mbps+" Мбит/с":"—"}</b></div><div><span class="mut sm">Аптайм</span><b>${x.uptime!=null?x.uptime+"%":"—"}</b></div></div>
+  ${spark(x.hist)}${x.err&&x.ok!==true?`<div class="note warn">${esc(x.err)}${x.fails?` · неудач подряд: ${x.fails}`:""}</div>`:""}
+  <div class="row mt">${x.enabled?`<button class="btn s d" onclick="kwCmd('disable','${x.uuid}')">Убрать из подписки</button>`:`<button class="btn s p" onclick="kwCmd('enable','${x.uuid}')">Вернуть в подписку</button>`}<span class="mut sm">${x.ts?"проверен "+ago(x.ts):""}</span></div></div>`}).join("")||`<div class="card empty">Данных пока нет — нажмите «Проверить сейчас».</div>`)+`</div>`;
+ h+=`<div class="grid k2 mt"><div class="card"><h3>Ноды Remnawave</h3><div class="tw"><table>${(d.nodes||[]).map(n=>`<tr><td><b>${esc(n.name)}</b><div class="mut sm">${esc(n.addr||"")}</div></td><td class="num">${fmt(n.online)} онлайн</td><td class="num"><span class="pill ${n.on?"ok":n.disabled?"":"bad"}">${n.on?"работает":n.disabled?"выключена":"нет связи"}</span></td></tr>`).join("")||`<tr><td class="mut">нет данных</td></tr>`}</table></div></div>
+ <div class="card"><h3>Журнал автоматики</h3>${(d.log||[]).length?`<div class="tw"><table>${d.log.map(l=>`<tr><td class="mut sm" style="white-space:nowrap">${dt(l.ts)}</td><td><span class="pill ${l.kind==="up"?"ok":l.kind==="down"?"bad":""}">${l.kind==="up"?"вернул":l.kind==="down"?"убрал":"вручную"}</span></td><td class="sm">${esc(l.text)}</td></tr>`).join("")}</table></div>`:`<div class="empty">Пока всё спокойно — ни один ключ не убирался.</div>`}</div></div>`;
+ const c=d.cfg||{};
+ h+=`<div class="note mt">Каждые <b>${Math.round((c.interval||600)/60)} мин</b> каждый ключ проверяется по-настоящему из России (RU-сервер): подключение, пинг и скорость. Не работает <b>${c.fail_limit||3}</b> проверки подряд — ключ автоматически убирается из подписки клиентов, админам приходит уведомление, Happ сам переключается на рабочий. Заработал <b>${c.ok_limit||2}</b> раза подряд — возвращается обратно. В подписке всегда остаётся минимум <b>${c.min_alive||2}</b> рабочих ключа. Ключи, выключенные вручную, автоматика не трогает.</div></div>`;
+ $("#main").innerHTML=h;
+ if(location.hash.startsWith("#keys"))KW_T=setTimeout(vKeys,d.running?5000:30000)}
+async function kwCmd(op,uuid){
+ if(op!=="check"&&!confirm(op==="disable"?"Убрать этот ключ из подписки клиентов?":"Вернуть ключ в подписку клиентов?"))return;
+ try{await api("keys",{json:{op,uuid}});toast(op==="check"?"Проверка запущена — займёт 1–3 минуты":"Принято — применяю и перепроверяю");setTimeout(vKeys,1200)}catch(e){toast(e.message,1)}}
+
+/* ---------------- 🤖 Автоворонка ---------------- */
+async function vAuto(){
+ loading();const d=await api("auto");
+ let h=head("Автоворонка",`<span class="state ${d.on?"on":"off"}">${d.on?"● Работает":"○ Выключена"}</span><label class="sw"><input type="checkbox" ${d.on?"checked":""} onchange="autoToggle(this.checked)"><span></span></label>`);
+ h+=`<div class="grid k4">${kpi("Отправлено сообщений",fmt(d.total),"за всё время","hl")}${kpi("Оплатили после",fmt(d.conv),"в течение 72 часов")}
+ ${kpi("Выручка от воронки",rub(d.rev),"оплаты после сообщений")}${kpi("Сейчас",d.on?(d.quiet?"тихие часы":"отправляет"):"выключена",d.on?"реклама — 10:00–21:00 МСК, напоминания — всегда":"включите переключателем вверху")}</div>`;
+ h+=`<div class="flow mt">`+d.steps.map((s,i)=>`<div class="card fstep"><div class="fnum">${i+1}</div><div class="im"><img src="/static/p/${s.asset}.jpg" alt="" loading="lazy"></div>
+ <div class="fb"><div class="fw">${esc(s.when)}</div><b>${esc(s.who)}</b><div class="fm">${esc(s.msg)}</div>
+ <div class="fcnt"><div>24 ч<b>${fmt(s.d1)}</b></div><div>7 дней<b>${fmt(s.d7)}</b></div><div>всего<b>${fmt(s.all)}</b></div><div class="c">оплатили<b>${fmt(s.conv)}</b></div></div></div></div>`).join("")+`</div>`;
+ h+=`<div class="card mt"><h3>Последние отправки<span class="sp"></span><a class="sm" href="#stats">подробная статистика →</a></h3>`+(d.recent.length?`<div class="tw"><table><tr><th>Когда</th><th>Кому</th><th>Сообщение</th></tr>${d.recent.map(r=>`<tr class="cl" onclick="go('user/${r.tg_id}')"><td class="mut sm" style="white-space:nowrap">${dt(r.ts)}</td><td>${esc(r.user||r.tg_id)}</td><td><span class="pill">${esc(r.name)}</span></td></tr>`).join("")}</table></div>`:`<div class="empty">Воронка ещё ничего не отправляла.</div>`)+`</div>
+ <div class="note mt">Один человек получает не больше одного рекламного сообщения за 20 часов, каждое сообщение — один раз. Заблокировавшим бота и отключённым вручную ничего не уходит. Превью всех сообщений с кнопками — команда <code>/pushtest</code> в боте.</div>`;
+ $("#main").innerHTML=h}
+async function autoToggle(on){try{await api("auto",{json:{on}});toast(on?"Автоворонка включена":"Автоворонка выключена");vAuto()}catch(e){toast(e.message,1)}}
+
+/* ---------------- 🛠 Управление v5 (25.11.2026) ---------------- */
+function opsDirty(u){const r=$("#hr_"+u);if(!r)return;const n=$("#hn_"+u),p=$("#hp_"+u);r.classList.toggle("dirty",n.value!==n.defaultValue||p.value!==p.defaultValue)}
+async function opsRoutes(){const ip=$("#rIp").value.trim(),cc=$("#rCc").value.trim().toUpperCase(),name=$("#rName").value.trim();
+ if(!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)){$("#rErr").textContent="Введите IPv4 ноды";return}
+ if(!/^[A-Z]{2}$/.test(cc)){$("#rErr").textContent="Код страны — две латинские буквы, напр. DE";return}
+ if(!name){$("#rErr").textContent="Введите название — так ключ будет называться у клиентов";return}
+ $("#rErr").textContent="";if(!confirm(`Добавить ключи «через RU» и «TurboFlare» для ${name} (${ip})?`))return;
+ await opsPost({op:"node_routes",ip,name,cc},"Добавление ключей запущено");vOps()}
+async function opsNode(){const ip=$("#nIp").value.trim(),cc=$("#nCc").value.trim().toUpperCase();
+ if(!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)){$("#nErr").textContent="Введите IPv4 сервера";return}
+ if(!/^[A-Z]{2}$/.test(cc)){$("#nErr").textContent="Код страны — две латинские буквы, напр. FR";return}
+ $("#nErr").textContent="";if(!confirm(`Развернуть ноду на ${ip}?`))return;
+ const pw=$("#nPw").value;$("#nPw").value="";
+ await opsPost({op:"node",ip,password:pw,name:$("#nName").value.trim(),cc,label:$("#nLabel").value.trim(),cdn:$("#nCdn").checked},"Развёртывание ноды запущено");vOps()}
+async function vOps(){
+ clearTimeout(OPS_T);const first=!$("#opsRoot");if(first)loading();
+ const [d,kw]=await Promise.all([api("ops"),api("keys").catch(()=>({hosts:[]}))]);
+ const H={};(kw.hosts||[]).forEach(x=>H[x.uuid]=x);
+ const rh=d.relay_health||{},ports=rh.ports||{},age=rh.ts?Math.round(Date.now()/1000-rh.ts):null;
+ const P={"8441":"🇫🇮 FI","8442":"🇪🇸 ES","8443":"🇩🇪 DE","8444":"🇳🇱 NL"};
+ const hosts=[...d.hosts].sort((a,b)=>(+a.viewPosition||0)-(+b.viewPosition||0));
+ const on=hosts.filter(x=>x.on),off=hosts.filter(x=>!x.on),alive=on.filter(x=>H[x.uuid]&&H[x.uuid].ok).length;
+ const row=x=>{const k=H[x.uuid];const hh=!k||k.ok==null?`<span class="hh na"><i></i>не проверялся</span>`:k.ok?`<span class="hh ok"><i></i>${k.ms} мс из РФ${k.mbps?` · ${k.mbps} Мбит/с`:""}</span>`:`<span class="hh bad"><i></i>${k.auto_disabled?"убран автоматикой":"не отвечает"}</span>`;
+  return `<div class="card hrow ${x.on?"":"off"}" id="hr_${x.uuid}">
+  <div class="hpos"><small>позиция</small><input id="hp_${x.uuid}" type="number" min="0" step="1" value="${Number(x.viewPosition)||0}" oninput="opsDirty('${x.uuid}')"></div>
+  <div style="min-width:0"><div class="hname"><input type="text" id="hn_${x.uuid}" value="${esc(x.remark||"")}" oninput="opsDirty('${x.uuid}')"></div>
+   <div class="hmeta"><code>${esc(x.address)}:${x.port}</code>${hh}</div></div>
+  <div class="hsavec"><button class="btn p s hsave" onclick="opsSaveHost('${x.uuid}')">Сохранить</button></div>
+  <div class="htog"><label class="sw"><input type="checkbox" ${x.on?"checked":""} onchange="opsToggle('${x.uuid}',this.checked)"><span></span></label>${x.on?"в подписке":"скрыт"}</div></div>`};
+ let h=`<div id="opsRoot">`+head("Управление",`<div class="ops-sum"><span class="pill ok">в подписке: ${on.length}</span><span class="pill">скрыто: ${off.length}</span><span class="pill ${alive===on.length?"ok":"bad"}">работают из РФ: ${alive}/${on.length}</span></div><button class="btn" onclick="vOps()">Обновить</button>`);
+ h+=`<div class="ops-sec">Серверы в подписке клиентов</div><div class="hlist">${on.map(row).join("")||`<div class="card empty">Ни одного сервера в подписке!</div>`}</div>`;
+ h+=`<div class="note mt">Позиция — порядок в приложении (0 = первый). Название меняется у всех клиентов при следующем обновлении подписки. Переключатель мгновенно показывает или скрывает сервер.</div>`;
+ h+=`<details class="mt"><summary class="ops-sec" style="cursor:pointer;margin:18px 0 10px">Скрытые серверы (${off.length}) — нажмите, чтобы показать</summary><div class="hlist">${off.map(row).join("")}</div></details>`;
+ h+=`<div class="ops-sec">Инфраструктура</div><div class="grid k2">
+ <div class="card"><h3>RU-вход<span class="sp"></span>${age!=null?`<span class="pill ${age<180?"ok":"bad"}">${age<180?"отчёт свежий":"отчёт устарел"} · ${age} с</span>`:""}</h3>
+  <div class="mut sm">ru.vertuwpn.ru указывает на</div><div class="ru-ip">${esc(d.ru_ip||"—")}</div>
+  <div class="ports">${Object.entries(P).map(([p,n])=>`<div class="port ${ports[p]!=null?"ok":"bad"}"><small>${n} · ${p}</small><b>${ports[p]!=null?ports[p]+" мс":"нет"}</b></div>`).join("")}</div>
+  <details><summary class="btn" style="display:inline-flex">Заменить RU-сервер</summary>
+  <div class="wiz">
+   <div class="wz"><i>1</i><div><b>Добавьте ключ на новый сервер</b><div class="mut">В файл <code>/root/.ssh/authorized_keys</code> (Ubuntu/Debian)</div><div class="pubk mt" id="pubk">${esc(d.pubkey)}</div><button class="btn s mt" onclick="opsCopy()">Скопировать ключ</button></div></div>
+   <div class="wz"><i>2</i><div><b>Укажите IP нового сервера</b><input type="text" id="ruIp" placeholder="например 194.67.120.56"><label class="cbx"><input type="checkbox" id="ruDns" checked> сразу переключить ru.vertuwpn.ru</label><div class="ferr" id="ruErr"></div></div></div>
+   <div class="wz"><i>3</i><div><b>Запустите — остальное автоматически</b><div class="mut">Релей, хоп, отчёт о здоровье и DNS. Ключи клиентов менять не нужно.</div><button class="btn p mt" onclick="opsRu()">Развернуть RU-вход</button></div></div>
+  </div></details></div>
+ <div class="card"><h3>Новый резервный канал (CDN)</h3><div class="mut sm">Сам выпустит сертификат, создаст ресурс в Yandex CDN, DNS в Cloudflare и ключ «🛡 Обход», проверит из РФ и включит.</div>
+  <div class="wiz">
+   <div class="wz"><i>1</i><div><b>Адрес</b><input type="text" id="cdnName" placeholder="поддомен, напр. edge2.vertuwpn.ru"><input type="text" id="cdnAlias" class="mt" placeholder="доп. адреса (необязательно), напр. ya3.widumpn.com"></div></div>
+   <div class="wz"><i>2</i><div><b>Источник и доступы</b><input type="text" id="cdnOrigin" placeholder="нода-источник (по умолч. 195.96.132.187:9443)"><textarea id="cdnSa" rows="3" class="mt" style="min-height:70px" placeholder="JSON ключа Yandex (пусто = сохранённый ${esc(d.yc_sa||"")})"></textarea><input type="text" id="cdnCf" class="mt" placeholder="API-токен Cloudflare (пусто = текущий)"></div></div>
+   <div class="wz"><i>3</i><div><b>Запуск</b><label class="cbx"><input type="checkbox" id="cdnTest" checked> проверить из РФ перед включением</label><div class="ferr" id="cdnErr"></div><button class="btn p mt" onclick="opsCdn()">Развернуть CDN</button></div></div>
+  </div></div></div>`;
+ h+=`<div class="card mt"><h3>Новая нода «под ключ»<span class="sp"></span><span class="mut sm">Docker, файрвол, нода Remnawave, DNS, прямой ключ, проверка из РФ</span></h3>
+  <div class="wiz">
+   <div class="wz"><i>1</i><div><b>Сервер</b><div class="grid k3"><input type="text" id="nIp" placeholder="IP, напр. 45.90.16.220"><input type="password" id="nPw" placeholder="пароль root (пусто — если ключ уже стоит)" autocomplete="new-password"><input type="text" id="nName" placeholder="название, напр. Франция · Париж"></div><div class="mut sm mt">Пароль используется один раз, чтобы поставить ключи; потом вход по паролю на сервере закрывается. Нигде не сохраняется.</div></div></div>
+   <div class="wz"><i>2</i><div><b>Страна и адрес</b><div class="grid k3"><input type="text" id="nCc" placeholder="код страны: FR, PL, DE…" maxlength="2"><input type="text" id="nLabel" placeholder="поддомен: node5 → node5.vertuwpn.ru"><label class="cbx"><input type="checkbox" id="nCdn"> сразу сделать CDN-канал</label></div></div></div>
+   <div class="wz"><i>3</i><div><b>Запуск</b><div class="mut sm">Прямой ключ создаётся выключенным и попадает в аварийный резерв: сторож проверит его из РФ и включит при аварии. Ход — в «Задачах» ниже, итог — в боте.</div><div class="ferr" id="nErr"></div><button class="btn p mt" onclick="opsNode()">Развернуть ноду</button></div></div>
+  </div></div>`;
+ h+=`<div class="card mt"><h3>Ключи для уже стоящей ноды<span class="sp"></span><span class="mut sm">RU-вход + TurboFlare</span></h3>
+  <div class="mut sm">Для ноды, которая уже работает в панели: добавит порт на ru.vertuwpn.ru и ключ «через RU» (сразу в подписку, если нода отвечает), путь на tetrixfilm.ru и ключ «TurboFlare» (в аварийный резерв). Если такие ключи уже есть — повторно не создаст.</div>
+  <div class="grid k4 mt"><input type="text" id="rIp" placeholder="IP ноды"><input type="text" id="rName" placeholder="название, напр. Германия · Франкфурт"><input type="text" id="rCc" placeholder="код страны: DE" maxlength="2"><button class="btn p" onclick="opsRoutes()">Добавить ключи</button></div>
+  <div class="ferr" id="rErr"></div></div>`;
+ const jobs=d.jobs||[];
+ h+=`<div class="ops-sec">Задачи</div><div class="card">`+(jobs.length?`<div class="jobs">`+jobs.map(j=>`<details class="job ${j.status==="error"?"err":j.status==="ok"?"":"run"}" ${j.status==="running"?"open":""}><span class="jd"></span><summary><b>${esc(j.title)}</b><span class="pill ${j.status==="ok"?"ok":j.status==="error"?"bad":"w"}">${j.status==="ok"?"готово":j.status==="error"?"ошибка":"выполняется…"}</span><span class="mut sm">${dt(j.started)}</span></summary><pre>${esc((j.log||[]).join("\n"))}</pre></details>`).join("")+`</div>`:`<div class="empty">Задач пока не было</div>`)+`</div></div>`;
+ const keep={ruIp:$("#ruIp")?.value,cdnName:$("#cdnName")?.value,cdnAlias:$("#cdnAlias")?.value,cdnOrigin:$("#cdnOrigin")?.value,cdnSa:$("#cdnSa")?.value,cdnCf:$("#cdnCf")?.value};
+ $("#main").innerHTML=h;for(const [k,v] of Object.entries(keep)){if(v&&$("#"+k))$("#"+k).value=v}
+ if(jobs.some(j=>j.status==="running")&&location.hash.startsWith("#ops"))OPS_T=setTimeout(vOps,4000)}
+
+/* ---------------- 🔑 Ключи v2: группы, резерв, учения ---------------- */
+const GRP={ru:["Через RU-вход","DE / NL / ES через ru.vertuwpn.ru"],cdn:["Через CDN","«🛡 Резервные каналы» — Yandex CDN"],direct:["Прямые",""],reserve:["Аварийный резерв","включается сам, когда основных мало — по приоритету сверху вниз"]};
+const SCN={ru:["RU-вход упал","все ключи через RU не отвечают"],cdn:["Упали CDN-каналы","все 🛡-каналы не отвечают"],all_primary:["RU и CDN упали","нужен аварийный резерв"],everything:["Упало всё","даже резерв — проверка тревоги"]};
+function keyCard(x){const s=x.reserve_on?["ok","резерв включён"]:x.group==="reserve"?(x.ok===true?["w","резерв · готов"]:x.ok===false?["bad","резерв · не работает"]:["w","резерв · не проверен"]):x.group_off?["bad","убран: RU-вход упал"]:x.auto_disabled?["bad","убран из подписки"]:x.ok===true?["ok","работает"]:x.ok===false?["bad","не отвечает"]:["w","ждёт проверки"];
+ return `<div class="card key ${s[0]} ${x.group==="reserve"?"res":""} ${x.reserve_on?"on":""}"><div class="kh"><span class="kdot ${s[0]}"></span><div style="flex:1;min-width:0"><b>${esc(x.remark)}</b><div class="mut sm">${esc(x.address)}:${esc(x.port)}</div></div><span class="pill ${s[0]}">${s[1]}</span></div>
+ <div class="kstats"><div><span class="mut sm">Пинг из РФ</span><b>${x.ms!=null?x.ms+" мс":"—"}</b></div><div><span class="mut sm">Скорость</span><b>${x.mbps!=null?x.mbps+" Мбит/с":"—"}</b></div><div><span class="mut sm">Аптайм</span><b>${x.uptime!=null?x.uptime+"%":"—"}</b></div></div>
+ ${spark(x.hist)}${x.err&&x.ok!==true?`<div class="note warn">${esc(x.err)}${x.fails?` · неудач подряд: ${x.fails}`:""}</div>`:""}
+ <div class="row mt">${x.enabled?`<button class="btn s d" onclick="kwCmd('disable','${x.uuid}')">Убрать из подписки</button>`:`<button class="btn s p" onclick="kwCmd('enable','${x.uuid}')">Включить вручную</button>`}<span class="mut sm">${x.ts?"проверен "+ago(x.ts):""}</span></div></div>`}
+async function vKeys(){
+ clearTimeout(KW_T);if(!$("#kwRoot"))loading();
+ const d=await api("keys");const H=d.hosts.filter(x=>!x.auto),A=d.hosts.find(x=>x.auto);
+ const prim=H.filter(x=>x.group!=="reserve"),inSub=prim.filter(x=>x.enabled),ok=inSub.filter(x=>x.ok).length;
+ const res=H.filter(x=>x.group==="reserve"),resOn=res.filter(x=>x.reserve_on).length,resOk=res.filter(x=>x.ok).length;
+ const ruDown=(d.groups.ru||{}).down;
+ const st=d.running?`<span class="ld"></span>&nbsp; идёт проверка из РФ…`:(d.last_run?`проверено ${ago(d.last_run)}`:"ещё не проверялось");
+ let h=`<div id="kwRoot">`+head("Ключи",`<span class="mut sm">${st}</span><button class="btn p" onclick="kwCmd('check')" ${d.running?"disabled":""}>Проверить сейчас</button>`);
+ if(d.sim)h+=`<div class="simbar">🧪 Идут учения: «${esc((SCN[d.sim.scenario]||[d.sim.scenario])[0])}» до ${dt(d.sim.until)} — подписку клиентов не меняю, сообщения в бот помечены «УЧЕНИЯ»<span class="sp"></span><button class="btn s" onclick="kwStop()">Остановить</button></div>`;
+ if(d.error)h+=`<div class="note warn" style="margin-bottom:14px">Последняя проверка не прошла: ${esc(d.error)}</div>`;
+ if(ruDown)h+=`<div class="note warn" style="margin-bottom:14px">RU-вход недоступен — ключи через него убраны из подписки, клиенты на CDN${resOn?" и аварийном резерве":""}. Вернутся сами.</div>`;
+ h+=`<div class="grid k4">${kpi("Работают из РФ",`${ok} / ${inSub.length}`,ok===inSub.length&&ok?"все ключи в подписке живые":"есть неработающие",ok===inSub.length&&ok?"hl":"")}
+ ${kpi("RU-вход",ruDown?"упал":"работает",d.relay_age!=null?`отчёт сервера ${d.relay_age} с назад`:"нет отчёта")}
+ ${kpi("Аварийный резерв",resOn?`включён: ${resOn}`:`готов: ${resOk} / ${res.length}`,resOn?"основных ключей мало":"ждёт аварии")}
+ ${kpi("«Авто» у клиентов",A&&A.ok?`${A.ms} мс`:(A?"не отвечает":"—"),"сам выбирает лучший")}</div>`;
+ for(const g of ["ru","cdn","direct","reserve"]){let L=H.filter(x=>(x.group||"cdn")===g);if(g==="reserve")L.sort((a,b)=>d.reserve_order.indexOf(a.uuid)-d.reserve_order.indexOf(b.uuid));if(!L.length)continue;
+  const okN=L.filter(x=>x.ok).length;h+=`<div class="grp-h">${GRP[g][0]} <span class="pill ${okN===L.length?"ok":okN?"w":"bad"}">${okN} / ${L.length} работают</span><span class="mut sm" style="text-transform:none;letter-spacing:0;font-weight:500">${GRP[g][1]}</span></div><div class="kgrid">${L.map(keyCard).join("")}</div>`}
+ h+=`<div class="card mt"><h3>Учения — проверить сценарии аварий<span class="sp"></span><span class="mut sm">клиентов не трогают · 30 мин · сообщения в бот админам</span></h3><div class="drill">${Object.entries(SCN).map(([k,[t,s]])=>`<button onclick="kwSim('${k}')"><b>${t}</b><small>${s}</small></button>`).join("")}</div></div>`;
+ h+=`<div class="grid k2 mt"><div class="card"><h3>Ноды Remnawave</h3><div class="tw"><table>${(d.nodes||[]).map(n=>`<tr><td><b>${esc(n.name)}</b><div class="mut sm">${esc(n.addr||"")}</div></td><td class="num">${fmt(n.online)} онлайн</td><td class="num"><span class="pill ${n.on?"ok":n.disabled?"":"bad"}">${n.on?"работает":n.disabled?"выключена":"нет связи"}</span></td></tr>`).join("")||`<tr><td class="mut">нет данных</td></tr>`}</table></div></div>
+ <div class="card"><h3>Журнал автоматики</h3>${(d.log||[]).length?`<div class="tw"><table>${d.log.map(l=>`<tr><td class="mut sm" style="white-space:nowrap">${dt(l.ts)}</td><td><span class="pill ${l.kind==="up"?"ok":l.kind==="down"?"bad":""}">${l.kind==="up"?"включил":l.kind==="down"?"убрал":"вручную"}</span></td><td class="sm">${esc(l.text)}</td></tr>`).join("")}</table></div>`:`<div class="empty">Пока всё спокойно.</div>`}</div></div>`;
+ const c=d.cfg||{};
+ h+=`<div class="note mt">Каждые <b>${Math.round((c.interval||300)/60)} мин</b> все ключи проверяются из России. Один ключ не работает <b>${c.fail_limit||3}</b> раза подряд — убирается. Весь RU-вход не работает <b>${c.group_limit||2}</b> раза подряд — убираются все RU-ключи разом. Основных живых меньше <b>${c.min_alive||2}</b> — включается аварийный резерв по приоритету. Всё ожило — возвращается как было. Обо всём приходят сообщения админам в бот.</div></div>`;
+ $("#main").innerHTML=h;
+ if(location.hash.startsWith("#keys"))KW_T=setTimeout(vKeys,d.running?5000:30000)}
+async function kwStop(){try{await api("keys",{json:{op:"sim_stop"}});toast("Учения остановлены");setTimeout(vKeys,1500)}catch(e){toast(e.message,1)}}
+async function kwSim(sc){if(!confirm("Начать учения «"+SCN[sc][0]+"»?\nПодписка клиентов не изменится — система только напишет админам в бот, что бы она сделала."))return;
+ try{await api("keys",{json:{op:"sim",scenario:sc}});toast("Учения начались — смотрите сообщения в боте");setTimeout(vKeys,1500)}catch(e){toast(e.message,1)}}
+
+/* ---------------- 🛡 Отказоустойчивость ---------------- */
+function okI(v){return v===true?'<span class="i ok">✓</span>':v===false?'<span class="i bad">✕</span>':'<span class="i w">?</span>'}
+function agoS(s){return s==null?"—":s<90?`${s} с`:s<5400?`${Math.round(s/60)} мин`:`${Math.round(s/3600)} ч`}
+async function vDr(){
+ loading();const d=await api("dr");const b=d.backup||{},r=d.restore||{},sn=d.sentinel||{},k=d.keys||{},T=b.targets||{};
+ const tOk=Object.values(T).filter(t=>t.ok).length,G=k.groups||{};
+ const L=[["1","Ключи переключаются сами",`RU-вход ${(G.ru||{}).ok||0}/${(G.ru||{}).total||0} · CDN ${(G.cdn||{}).ok||0}/${(G.cdn||{}).total||0} · резерв готов ${(G.reserve||{}).ok||0}/${(G.reserve||{}).total||0}`,k.ru&&k.ru.down?["bad","RU-вход упал"]:k.reserve&&k.reserve.active?["w","работает резерв"]:["ok","в норме"]],
+  ["2","Бэкапы на 4 сервера",`${tOk}/4 сервера получили последний бэкап · бот каждые 15 мин, панель каждый час, полный снимок раз в сутки`,tOk===4?["ok","все доходят"]:["bad","есть проблемы"]],
+  ["3","Проверка восстановления на DE",r.checked?`последняя ${dt(r.checked)} · ${esc((r.panel||{}).info||"")}`:"ещё не проводилась",r.ok?["ok","восстанавливается"]:r.checked?["bad","не прошла"]:["w","ждёт"]],
+  ["4","Сторожа главного сервера",`DE, ES, FI проверяют NL каждые 30 с · решение большинством`,sn.state==="down"?["bad","NL недоступен"]:sn.votes?["ok","NL в порядке"]:["w","нет данных"]]];
+ let h=head("Отказоустойчивость",`<button class="btn" onclick="vDr()">Обновить</button>`);
+ h+=`<div class="hlist">${L.map(([n,t,s,st])=>`<div class="card layer"><div class="n">${n}</div><div><b>${t}</b><div class="mut sm">${s}</div></div><span class="pill ${st[0]}">${st[1]}</span></div>`).join("")}</div>`;
+ h+=`<div class="ops-sec">Бэкапы — где лежат</div><div class="drgrid">${["DE","ES","FI","RU"].map(n=>{const t=T[n]||{};return `<div class="card srv"><div class="t"><span class="kdot ${t.ok?"ok":"bad"}"></span>${n}</div><div class="ip">${esc(t.ip||"")}</div><div class="big">${t.size?bytesH(t.size):"—"}</div><div class="mut sm">${t.ok?`${t.files} файлов · отправлено ${ago(t.ts)}`:esc(t.err||"нет данных")}</div></div>`}).join("")}</div>`;
+ const V=b.verify||{},Lt=b.latest||{},C=b.counts||{};
+ h+=`<div class="grid k2 mt"><div class="card"><h3>Что в бэкапах</h3>${[["bot","База бота","каждые 15 мин · 2 дня"],["panel","База панели Remnawave","каждый час · 7 дней"],["full","Полный снимок: код, конфиги, ключи, сертификаты, службы","раз в сутки · 30 дней"]].map(([kk,t,s])=>`<div class="chk">${okI((V[kk]||{}).ok)}<div><b>${t}</b><span>${s} · копий: ${C[kk]||0} · последняя: ${esc(Lt[kk]||"—")}<br>проверка расшифровки: ${esc((V[kk]||{}).info||"—")}</span></div></div>`).join("")}
+ ${b.manifest?`<div class="note mt">Версия бота в снимке: <b>${esc(b.manifest.bot_version)}</b> · служб: ${Object.keys(b.manifest.services||{}).length} · контейнеров: ${(b.manifest.containers||[]).length}</div>`:""}</div>
+ <div class="card"><h3>Восстановление на DE (по-настоящему)</h3>${["bot","panel","full"].map(kk=>`<div class="chk">${okI((r[kk]||{}).ok)}<div><b>${kk==="bot"?"База бота":kk==="panel"?"База панели (временный postgres)":"Полный снимок"}</b><span>${esc((r[kk]||{}).info||"—")}</span></div></div>`).join("")}
+ <div class="note mt">Свежесть: последний бэкап бота на DE — ${agoS(r.bot_age)} назад. Старше часа — тревога админам.</div></div></div>`;
+ const vt=sn.votes||{};
+ h+=`<div class="ops-sec">Сторожа главного сервера NL</div><div class="drgrid">${["DE","ES","FI"].map(n=>{const v=vt[n];return `<div class="card srv"><div class="t"><span class="kdot ${v?(v.down?"bad":"ok"):"w"}"></span>${n}${n==="DE"?' <span class="pill v">ведущий</span>':""}</div><div class="big">${v?(v.down?"NL не отвечает":"NL работает"):"нет данных"}</div><div class="mut sm">${v?`веб ${v.web}/2 · бот ${v.bot===true?"жив":v.bot===false?"502":"—"}`:""}</div></div>`}).join("")}
+ <div class="card srv"><div class="t">Режим</div><div class="big">${sn.mode==="failover"?"автопереезд":"наблюдение"}</div><div class="mut sm">${sn.mode==="failover"?"при падении NL всё переедет на DE":"при падении NL — тревога админам; автопереезд включится после учений на полигоне"}</div></div></div>`;
+ h+=`<div class="note mt">Бэкапы зашифрованы (AES-256) и отправляются отдельным ключом, который на серверах умеет только складывать файлы в /var/backups/vaynah. Сторожа считают NL упавшим, только если так видят минимум 2 из 3 серверов дольше 5 минут.</div>`;
+ $("#main").innerHTML=h}
+const VIEWS={dr:vDr,keys:vKeys,auto:vAuto,dash:vDash,funnel:vFunnel,pays:()=>vPays(0),users:()=>vUsers(0),bc:vBc,autopay:vAutopay,refs:vRefs,promo:vPromo,settings:vSettings,admins:vAdmins,srv:vSrv,ops:vOps,stats:vStats};
+function go(h){location.hash=h}
+async function route(){const h=(location.hash||"#dash").slice(1);const [k,arg]=h.split("/");setNav(k==="user"?"users":k);window.scrollTo(0,0);
+ try{if(k==="user")await vUser(arg);else await (VIEWS[k]||vDash)()}catch(e){if(e.message!=="auth")$("#main").innerHTML=`<div class="card empty">⚠️ ${esc(e.message)}<div class="mt"><button class="btn" onclick="route()">Повторить</button></div></div>`}}
+if(!AUTH){const e=new URLSearchParams(location.search).get("e");
+ $("#root").innerHTML=`<div class="login"><div class="logo"><img class="blogo" src="/static/v/logo.webp" alt="" style="width:46px;height:46px"><div>VAYNAH VPN<small>Админ-панель</small></div></div>
+ <div class="card" style="text-align:left">${e?`<div class="note warn" style="margin:0 0 12px">Ссылка входа недействительна или уже использована — получите новую.</div>`:""}
+ <b>Вход через Telegram-бота</b><p class="mut">Откройте <a href="https://t.me/${BOT}">@${BOT}</a> и отправьте команду <code>/panel</code> (или «⚙️ Админка» → «🖥 Веб-панель»). Бот пришлёт личную ссылку — по ней вы войдёте, браузер запомнит вас на 30 дней.</p>
+ <a class="btn p" style="display:block;text-align:center" href="https://t.me/${BOT}">Открыть бота</a></div></div>`}
+else{shell();window.addEventListener("hashchange",route);route()}
+</script>
+</body>
+</html>
